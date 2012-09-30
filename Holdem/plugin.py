@@ -48,12 +48,26 @@ class Holdem(callbacks.Plugin):
         Sets up a table to play Texas Hold'em on partner.
         """
         
-        irc.reply( holdemDirectory + 'holdem_game_' + var + '.db' )
         holdemGameFile = open( holdemDirectory + 'holdem_game_' + var + '.db', 'w')
         #holdemGameFile.write('')
 
         irc.replySuccess(format('Table \"%s\" was created partner.', var))
     create = wrap(create, ['text'])
+
+    def destroy(self, irc, msg, args, var):
+        """<game_name>
+
+        We throw the table out when you're done playing Texas Hold'em, partner.
+        """
+        if not os.path.exists( holdemDirectory + 'holdem_game_' + var + '.db'):
+            irc.replyError(format('Table \"%s\" doesn\'t exist, are you hallucinating partner?', var))
+        else:
+            os.remove( holdemDirectory + 'holdem_game_' + var + '.db')
+            irc.replySuccess(format('Table \"%s\" was thrown out partner.', var))
+        #holdemGameFile.write('')
+
+        irc.replySuccess(format('Table \"%s\" was created partner.', var))
+    destroy = wrap(destroy, ['text'])
 
     def tables(self, irc, msg, args):
         """This command takes no aruguments
@@ -65,7 +79,7 @@ class Holdem(callbacks.Plugin):
 
         irc.reply(listOfTables)
 
-        irc.reply( map( str, listOfTables ))
+        irc.reply( '%s' % ''.join( map( str, listOfTables )) )
     tables = wrap(tables)
 
 Class = Holdem
