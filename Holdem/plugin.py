@@ -61,10 +61,9 @@ class Holdem(callbacks.Plugin):
         Lists all the available tables, partner.
         """
 
-        listOfTables = glob.glob(conf.supybot.directories.data.dirize('/Holdem/holdem_game_*.db'))
+        listOfTables = os.listdir( holdemDirectory )
 
         irc.reply(listOfTables)
-        listOfTables = os.path.basename( glob.glob( holdemDirectory + 'holdem_game_*.db'))
 
         irc.reply( map( str, listOfTables ))
     tables = wrap(tables)
