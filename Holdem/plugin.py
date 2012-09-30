@@ -7,6 +7,7 @@ import supybot.callbacks as callbacks
 from supybot.i18n import PluginInternationalization, internationalizeDocstring
 import glob
 import os
+import re
 
 _ = PluginInternationalization('Holdem')
 
@@ -62,11 +63,9 @@ class Holdem(callbacks.Plugin):
         if not os.path.exists( holdemDirectory + 'holdem_game_' + var + '.db'):
             irc.replyError(format('Table \"%s\" doesn\'t exist, are you hallucinating partner?', var))
         else:
-            os.remove( holdemDirectory + 'holdem_game_' + var + '.db')
+            os.remove( holdemDirectory + 'Table_' + var + '.db')
             irc.replySuccess(format('Table \"%s\" was thrown out partner.', var))
-        #holdemGameFile.write('')
 
-        irc.replySuccess(format('Table \"%s\" was created partner.', var))
     destroy = wrap(destroy, ['text'])
 
     def tables(self, irc, msg, args):
@@ -75,9 +74,7 @@ class Holdem(callbacks.Plugin):
         Lists all the available tables, partner.
         """
 
-        listOfTables = os.listdir( holdemDirectory )
-
-        irc.reply(listOfTables)
+        listOfTables =  re.search( '(?<=.*\.db)', re.search( '(?<=Table_)', os.listdir( holdemDirectory )))
 
         irc.reply( '%s' % ''.join( map( str, listOfTables )) )
     tables = wrap(tables)
