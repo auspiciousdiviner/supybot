@@ -58,11 +58,12 @@ except IOError:
 @internationalizeDocstring
 class HuntNFish(callbacks.Plugin):
     """Adds hunt and fish commands for a basic hunting and fishing game."""
-    def __init__(self, chan):
-        self._hunters = []
-        self._fishers = []
 
     threaded = True
+
+    def __init__(self, irc):
+        self._hunters = []
+        self._fishers = []
 
     def _new_hunter(self, hunter):
         self._hunters.append(hunter)
