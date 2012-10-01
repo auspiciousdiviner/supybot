@@ -58,106 +58,126 @@ except IOError:
 @internationalizeDocstring
 class HuntNFish(callbacks.Plugin):
     """Adds hunt and fish commands for a basic hunting and fishing game."""
+    def __init__(self, chan):
+        self._hunters = []
+        self._fishers = []
+
     threaded = True
+
+    def _new_hunter(self, hunter):
+        self._hunters.append(hunter)
+
+    def _new_fisher(self, fisher):
+        self._fishers.append(fisher)
 
     def hunt(self,irc,msg,args):
         """
         performs a random hunt
         """
-        if(self.registryValue('enable', msg.args[0])):
-            animals = [' bear', ' gopher', ' rabbit', ' hunter', ' deer', ' fox', ' duck', ' moose', ' pokemon named Pikachu', ' park ranger', ' Yogi Bear', ' Boo Boo Bear', ' dog named Benji', ' cow', ' raccoon', ' koala bear', ' camper', ' channel lamer', ' your mom']
-            places = ['in some bushes', 'in a hunting blind', 'in a hole', 'up in a tree', 'in a hiding place', 'out in the open', 'in the middle of a field', 'downtown', 'on a street corner', 'at the local mall']
+        player = msg.nick
+        if player in self._hunters:
+            irc.reply("You're already hunting, don't be stupid.")
+        else:
+            self._new_hunter(player)
+            if(self.registryValue('enable', msg.args[0])):
+                animals = [' bear', ' gopher', ' rabbit', ' hunter', ' deer', ' fox', ' duck', ' moose', ' pokemon named Pikachu', ' park ranger', ' Yogi Bear', ' Boo Boo Bear', ' dog named Benji', ' cow', ' raccoon', ' koala bear', ' camper', ' channel lamer', ' your mom']
+                places = ['in some bushes', 'in a hunting blind', 'in a hole', 'up in a tree', 'in a hiding place', 'out in the open', 'in the middle of a field', 'downtown', 'on a street corner', 'at the local mall']
 
-            with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'r') as file:
-                data = file.readlines()
-                highScore = data[2].rstrip('\n')
-            huntrandom = random.getstate()   
-            random.seed(time.time())
-            currentWhat = random.choice(animals)
-            currentWhere = random.choice(places)
-            weight = random.randint(int(highScore)/2,int(highScore)+10)
-            weightType = self.registryValue('weightType')
-            thisHunt = (msg.nick + " goes hunting " + currentWhere + " for a " + str(weight) + weightType +  currentWhat)
-            irc.reply(thisHunt)
-            irc.reply("aims....")
-            irc.reply("fires.....")
-            time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
-            huntChance = random.randint(1,100)
-            successRate = self.registryValue('SuccessRate')
-            random.setstate(huntrandom)
-
-            if huntChance < successRate:
-                win = ("way to go, " + msg.nick + ". You killed the " + str(weight) + weightType + currentWhat)
-                irc.reply(win)
                 with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'r') as file:
                     data = file.readlines()
-                    bigHunt = data[2].rstrip('\n')
-                    if weight > int(bigHunt):
-                        with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'w') as file:
-                            data[0] = msg.nick
-                            data[1] = currentWhat 
-                            data[2] = weight
-                            file.writelines(str(data[0]))
-                            file.writelines('\n')
-                            file.writelines(str(data[1]))
-                            file.writelines('\n')
-                            file.writelines(str(data[2]))
-                            irc.reply("you got a new highscore")
+                    highScore = data[2].rstrip('\n')
+                huntrandom = random.getstate()   
+                random.seed(time.time())
+                currentWhat = random.choice(animals)
+                currentWhere = random.choice(places)
+                weight = random.randint(int(highScore)/2,int(highScore)+10)
+                weightType = self.registryValue('weightType')
+                thisHunt = (msg.nick + " goes hunting " + currentWhere + " for a " + str(weight) + weightType +  currentWhat)
+                irc.reply(thisHunt)
+                irc.reply("aims....")
+                irc.reply("fires.....")
+                time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
+                huntChance = random.randint(1,100)
+                successRate = self.registryValue('SuccessRate')
+                random.setstate(huntrandom)
+
+                if huntChance < successRate:
+                    win = ("way to go, " + msg.nick + ". You killed the " + str(weight) + weightType + currentWhat)
+                    irc.reply(win)
+                    with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'r') as file:
+                        data = file.readlines()
+                        bigHunt = data[2].rstrip('\n')
+                        if weight > int(bigHunt):
+                            with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'w') as file:
+                                data[0] = msg.nick
+                                data[1] = currentWhat 
+                                data[2] = weight
+                                file.writelines(str(data[0]))
+                                file.writelines('\n')
+                                file.writelines(str(data[1]))
+                                file.writelines('\n')
+                                file.writelines(str(data[2]))
+                                irc.reply("you got a new highscore")
 
 
-            else:
-                lose = ("oops, you missed, " + msg.nick)
-                irc.reply(lose)
+                else:
+                    lose = ("oops, you missed, " + msg.nick)
+                    irc.reply(lose)
 
 
     def fish(self,irc,msg,args):
         """
         performs a random fishing trip
         """
-        if(self.registryValue('enable', msg.args[0])):
-            fishes = (' Salmon', ' Herring', ' Yellowfin Tuna', ' Pink Salmon', ' Chub', ' Barbel', ' Perch', ' Northern Pike', ' Brown Trout', ' Arctic Char', ' Roach', ' Brayling', ' Bleak', ' Cat Fish', ' Sun Fish', ' Old Tire', ' Rusty Tin Can', ' Genie Lamp', ' Love Message In A Bottle', ' Old Log', ' Rubber Boot' , ' Dead Body', ' Loch Ness Monster', ' Old Fishing Lure', ' Piece of the Titanic', ' Chunk of Atlantis', ' Squid', ' Whale', ' Dolphin',  ' Porpoise' , ' Stingray', ' Submarine', ' Seal', ' Seahorse', ' Jellyfish', ' Starfish', ' Electric Eel', ' Great White Shark', ' Scuba Diver' , ' Lag Monster', ' Virus', ' Soggy Pack of Smokes', ' Bag of Weed', ' Boat Anchor', ' Pair Of Floaties', ' Mermaid', ' Merman', ' Halibut', ' Tiddler', ' Sock', ' Trout')
-            fishSpots = ('a Stream', 'a Lake', 'a River', 'a Pond', 'an Ocean', 'a Bathtub', 'a Kiddies Swimming Pool', 'a Toilet', 'a Pile of Vomit', 'a Pool of Urine', 'a Kitchen Sink', 'a Bathroom Sink', 'a Mud Puddle', 'a Pail of Water', 'a Bowl of Jell-O', 'a Wash Basin', 'a Rain Barrel', 'an Aquarium', 'a SnowBank', 'a WaterFall', 'a Cup of Coffee', 'a Glass of Milk')
+        player = msg.nick
+        if player in self._fishers:
+            irc.reply("You're already fishing, don't be stupid.")
+        else:
+            self._new_fisher(player)
+            if(self.registryValue('enable', msg.args[0])):
+                fishes = (' Salmon', ' Herring', ' Yellowfin Tuna', ' Pink Salmon', ' Chub', ' Barbel', ' Perch', ' Northern Pike', ' Brown Trout', ' Arctic Char', ' Roach', ' Brayling', ' Bleak', ' Cat Fish', ' Sun Fish', ' Old Tire', ' Rusty Tin Can', ' Genie Lamp', ' Love Message In A Bottle', ' Old Log', ' Rubber Boot' , ' Dead Body', ' Loch Ness Monster', ' Old Fishing Lure', ' Piece of the Titanic', ' Chunk of Atlantis', ' Squid', ' Whale', ' Dolphin',  ' Porpoise' , ' Stingray', ' Submarine', ' Seal', ' Seahorse', ' Jellyfish', ' Starfish', ' Electric Eel', ' Great White Shark', ' Scuba Diver' , ' Lag Monster', ' Virus', ' Soggy Pack of Smokes', ' Bag of Weed', ' Boat Anchor', ' Pair Of Floaties', ' Mermaid', ' Merman', ' Halibut', ' Tiddler', ' Sock', ' Trout')
+                fishSpots = ('a Stream', 'a Lake', 'a River', 'a Pond', 'an Ocean', 'a Bathtub', 'a Kiddies Swimming Pool', 'a Toilet', 'a Pile of Vomit', 'a Pool of Urine', 'a Kitchen Sink', 'a Bathroom Sink', 'a Mud Puddle', 'a Pail of Water', 'a Bowl of Jell-O', 'a Wash Basin', 'a Rain Barrel', 'an Aquarium', 'a SnowBank', 'a WaterFall', 'a Cup of Coffee', 'a Glass of Milk')
 
-            with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'r') as file:
-                data = file.readlines()
-                highScore = data[2].rstrip('\n')
-            fishrandom = random.getstate()
-            random.seed(time.time())
-            currentWhat = random.choice(fishes)
-            currentWhere = random.choice(fishSpots)
-            weight = random.randint(int(highScore)/2,int(highScore)+10)
-            weightType = self.registryValue('weightType')
-            thisFishing = (msg.nick + " goes fishing in " + currentWhere)
-            irc.reply(thisFishing)
-            irc.reply("casts in....")
-            irc.reply("a " + str(weight) + weightType + currentWhat + " is biting...")
-            time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
-            huntChance = random.randint(1,100)
-            successRate = self.registryValue('SuccessRate')
-            random.setstate(fishrandom)
-
-            if huntChance < successRate:
-                win = ("way to go, " + msg.nick + ". You caught the " + str(weight) + weightType + currentWhat)
-                irc.reply(win)
                 with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'r') as file:
                     data = file.readlines()
-                    bigFish = data[2].rstrip('\n')
-                    if weight > int(bigFish):
-                        with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'w') as file:
-                            data[0] = msg.nick
-                            data[1] = currentWhat 
-                            data[2] = weight
-                            file.writelines(str(data[0]))
-                            file.writelines('\n')
-                            file.writelines(str(data[1]))
-                            file.writelines('\n')
-                            file.writelines(str(data[2]))
-                            irc.reply("you got a new highscore")
+                    highScore = data[2].rstrip('\n')
+                fishrandom = random.getstate()
+                random.seed(time.time())
+                currentWhat = random.choice(fishes)
+                currentWhere = random.choice(fishSpots)
+                weight = random.randint(int(highScore)/2,int(highScore)+10)
+                weightType = self.registryValue('weightType')
+                thisFishing = (msg.nick + " goes fishing in " + currentWhere)
+                irc.reply(thisFishing)
+                irc.reply("casts in....")
+                irc.reply("a " + str(weight) + weightType + currentWhat + " is biting...")
+                time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
+                huntChance = random.randint(1,100)
+                successRate = self.registryValue('SuccessRate')
+                random.setstate(fishrandom)
+
+                if huntChance < successRate:
+                    win = ("way to go, " + msg.nick + ". You caught the " + str(weight) + weightType + currentWhat)
+                    irc.reply(win)
+                    with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'r') as file:
+                        data = file.readlines()
+                        bigFish = data[2].rstrip('\n')
+                        if weight > int(bigFish):
+                            with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'w') as file:
+                                data[0] = msg.nick
+                                data[1] = currentWhat 
+                                data[2] = weight
+                                file.writelines(str(data[0]))
+                                file.writelines('\n')
+                                file.writelines(str(data[1]))
+                                file.writelines('\n')
+                                file.writelines(str(data[2]))
+                                irc.reply("you got a new highscore")
 
 
-            else:
-                lose = ("oops, it got away, " + msg.nick)
-                irc.reply(lose)
+                else:
+                    lose = ("oops, it got away, " + msg.nick)
+                    irc.reply(lose)
 
     def trophy(self,irc,msg,args):
         """
