@@ -1,85 +1,103 @@
-import supybot.conf as conf
-import supybot.utils as utils
 from supybot.commands import *
-import supybot.plugins as plugins
-import supybot.ircutils as ircutils
+import supybot.ircmsgs as ircmsgs
 import supybot.callbacks as callbacks
-from supybot.i18n import PluginInternationalization, internationalizeDocstring
-import glob
-import os
-import re
 
-_ = PluginInternationalization('Holdem')
+import poker
+reload(poker)
 
-"""
-try:
-    with open(conf.supybot.directories.data.dirize('holdem_user.db')) as f: pass
-except IOError:
-    with open(conf.supybot.directories.data.dirize('holdem_user.db'), 'w') as file:
-        file.writelines('')
-try:
-    with open(conf.supybot.directories.data.dirize('holdem_money.db')) as f: pass
-except IOError:
-    with open(conf.supybot.directories.data.dirize('holdem_money.db'), 'w') as file:
-        file.writelines('')
-"""
+class Player:
+    def __init__(self,name,stack=1000):
+        self.name = name
+        self._stack = stack
+        self._hand = []
 
-dataDir =  conf.supybot.directories.data
-holdemDirectory = dataDir.dirize('Holdem/')
-
-
-@internationalizeDocstring
-class Holdem(callbacks.Plugin):
-    """Contains lots of commands to aid you in making your own Texas Hold'em games through IRC; use the 'create' command to start, 
-       everything afterwards is self-explantory.
-
-    """
-    threaded = True
-
-    def __init__(self, irc):
-        self.__parent = super(Holdem, self)
-        self.__parent.__init__(irc)
-        
-        if not os.path.exists( holdemDirectory ):
-            os.makedirs( holdemDirectory )
-
-    def create(self, irc, msg, args, var):
-        """<game_name>
-
-        Sets up a table to play Texas Hold'em on partner.
-        """
-        
-        holdemGameFile = open( holdemDirectory + 'holdem_game_' + var + '.db', 'w')
-        #holdemGameFile.write('')
-
-        irc.replySuccess(format('Table \"%s\" was created partner.', var))
-    create = wrap(create, ['text'])
-
-    def destroy(self, irc, msg, args, var):
-        """<game_name>
-
-        We throw the table out when you're done playing Texas Hold'em, partner.
-        """
-        if not os.path.exists( holdemDirectory + 'holdem_game_' + var + '.db'):
-            irc.replyError(format('Table \"%s\" doesn\'t exist, are you hallucinating partner?', var))
+    def bet(self, amount):
+        if amount <= self._stack:
+            self._stack -= amount
+            return True
         else:
-            os.remove( holdemDirectory + 'Table_' + var + '.db')
-            irc.replySuccess(format('Table \"%s\" was thrown out partner.', var))
+            return False
 
-    destroy = wrap(destroy, ['text'])
+    def deal_to(self,card):
+        self._hand.append(card)
 
-    def tables(self, irc, msg, args):
-        """This command takes no aruguments
+    def tell_hole_cards(self):
+        holecards = " ".join([poker.GetCard(c) for c in self._hand])
+        irc.queueMsg(ircmsgs.privmsg(self.name, holecards))
 
-        Lists all the available tables, partner.
-        """
 
-        listOfTables =  re.search( '(?<=.*\.db)', re.search( '(?<=Table_)', os.listdir( holdemDirectory )))
+PREDEALT=0
+PREFLOP=1
+FLOP=2
+TURN=3
+RIVER=4
+SHOWDOWN=5
+READYDEAL=-1
 
-        irc.reply( '%s' % ''.join( map( str, listOfTables )) )
-    tables = wrap(tables)
+class Game:
+    def __init__(self, chan):
+        self._chan = chan
+        self._board = []
+        self._pot = {'main':0}
+        self._players = []  # permanent list of players sitting at table
+        self._blinds = (20,10) 
+        self._bet = 0
+        self._state = PREFLOP
+        self._order = []    # build this list for each round to know in what
+                            # order who bets, etc.  last player is dealer
+        self._action = 0    # index of player who's the "action"
+
+    def deal(self,irc,msg,args):
+        if self._action != READYDEAL:
+            irc.reply("Not ready to deal yet. Hold on there, sparky")
+            return
+        if self._state == PREDEALT:
+            deck=poker.ShuffleDeck()
+            self._board = poker.Deal(deck, 5)
+            # create the visible board
+            self._visboard = []
+            # I could just deal both at the same time, but this feels better 
+            for x in (1,2):
+                for p in self._order:
+                    p = p.deal_to(poker.Deal(deck,1))
+            # tell them what cards they got
+            for p in self._order:
+            irc.reply("Cards dealt.  Let's see some action.")
+            return
+        if self._state == -1:
+            pass
+
+
+
+class Holdem(callbacks.Plugin):
+    """poker"""
+    def __init__(self,irc):
+        callbacks.Plugin.__init__(self,irc)
+
+    def board(self,irc,msg,args):
+        irc.reply(",".join([ poker.GetCard(c) for c in self._board]))
+
+
+    def _new_player(self, player):
+        self._players.append(player) 
+        self._bank[player] = self._starting_cash
+        if 1==len(self._players):
+            self._dealerBtn = player
+
+    def sit(self,irc,msg,args):
+        """ site down and play """
+        player = msg.nick
+        if player in self._players:
+            irc.reply("you're already playing. don't be stupid.")
+        else:
+            self._new_player(player)
+            self._big_blind(player)
+            irc.reply("ok, you're in the game.")
+
+
+
+
 
 Class = Holdem
 
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
+# vim:set shiftwidth=4 tabstop=4 expandtab textwidth=78:
