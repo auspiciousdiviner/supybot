@@ -61,7 +61,7 @@ class HuntNFish(callbacks.Plugin):
 
     threaded = True
 
-    def __init__(self, irc):
+    def __init__(self):
         self._hunters = []
         self._fishers = []
 
