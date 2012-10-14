@@ -65,10 +65,10 @@ class HuntNFish(callbacks.Plugin):
         self._hunters = []
         self._fishers = []
 
-    def _new_hunter(self, hunter):
+    def _new_hunter(hunter):
         self._hunters.append(hunter)
 
-    def _new_fisher(self, fisher):
+    def _new_fisher(fisher):
         self._fishers.append(fisher)
 
     def hunt(self,irc,msg,args):
@@ -76,7 +76,7 @@ class HuntNFish(callbacks.Plugin):
         performs a random hunt
         """
         player = msg.nick
-        if (player in self._hunters):
+        if player in self._hunters:
             irc.reply("You're already hunting, don't be stupid.")
         else:
             self._new_hunter(player)
@@ -131,7 +131,7 @@ class HuntNFish(callbacks.Plugin):
         performs a random fishing trip
         """
         player = msg.nick
-        if (player in self._fishers):
+        if player in self._fishers:
             irc.reply("You're already fishing, don't be stupid.")
         else:
             self._new_fisher(player)
