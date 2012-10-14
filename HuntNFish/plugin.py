@@ -126,7 +126,6 @@ class HuntNFish(callbacks.Plugin):
                 else:
                     lose = ("oops, you missed, " + msg.nick)
                     irc.reply(lose)
-            self._hunters.remove(player)
 
     def fish(self,irc,msg,args):
         """
@@ -184,7 +183,6 @@ class HuntNFish(callbacks.Plugin):
                 else:
                     lose = ("oops, it got away, " + msg.nick)
                     irc.reply(lose)
-            self._fishers.appen	d(player)
 
     def trophy(self,irc,msg,args):
         """
