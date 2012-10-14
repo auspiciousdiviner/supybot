@@ -67,12 +67,6 @@ class HuntNFish(callbacks.Plugin):
         self._hunters = []
         self._fishers = []
 
-    def _new_hunter(self, hunter):
-        self._hunters.append(hunter)
-
-    def _new_fisher(self, fisher):
-        self._fishers.append(fisher)
-
     def hunt(self,irc,msg,args):
         """
         performs a random hunt
@@ -81,7 +75,7 @@ class HuntNFish(callbacks.Plugin):
         if player in self._hunters:
             irc.reply("You're already hunting, don't be stupid.")
         else:
-            self._new_hunter(player)
+            self._hunters.append(player)
             if(self.registryValue('enable', msg.args[0])):
                 animals = [' bear', ' gopher', ' rabbit', ' hunter', ' deer', ' fox', ' duck', ' moose', ' pokemon named Pikachu', ' park ranger', ' Yogi Bear', ' Boo Boo Bear', ' dog named Benji', ' cow', ' raccoon', ' koala bear', ' camper', ' channel lamer', ' your mom']
                 places = ['in some bushes', 'in a hunting blind', 'in a hole', 'up in a tree', 'in a hiding place', 'out in the open', 'in the middle of a field', 'downtown', 'on a street corner', 'at the local mall']
@@ -126,7 +120,7 @@ class HuntNFish(callbacks.Plugin):
                 else:
                     lose = ("oops, you missed, " + msg.nick)
                     irc.reply(lose)
-
+            self._hunters.remove(player)
 
     def fish(self,irc,msg,args):
         """
@@ -136,7 +130,7 @@ class HuntNFish(callbacks.Plugin):
         if player in self._fishers:
             irc.reply("You're already fishing, don't be stupid.")
         else:
-            self._new_fisher(player)
+            self._fishers.append(player)
             if(self.registryValue('enable', msg.args[0])):
                 fishes = (' Salmon', ' Herring', ' Yellowfin Tuna', ' Pink Salmon', ' Chub', ' Barbel', ' Perch', ' Northern Pike', ' Brown Trout', ' Arctic Char', ' Roach', ' Brayling', ' Bleak', ' Cat Fish', ' Sun Fish', ' Old Tire', ' Rusty Tin Can', ' Genie Lamp', ' Love Message In A Bottle', ' Old Log', ' Rubber Boot' , ' Dead Body', ' Loch Ness Monster', ' Old Fishing Lure', ' Piece of the Titanic', ' Chunk of Atlantis', ' Squid', ' Whale', ' Dolphin',  ' Porpoise' , ' Stingray', ' Submarine', ' Seal', ' Seahorse', ' Jellyfish', ' Starfish', ' Electric Eel', ' Great White Shark', ' Scuba Diver' , ' Lag Monster', ' Virus', ' Soggy Pack of Smokes', ' Bag of Weed', ' Boat Anchor', ' Pair Of Floaties', ' Mermaid', ' Merman', ' Halibut', ' Tiddler', ' Sock', ' Trout')
                 fishSpots = ('a Stream', 'a Lake', 'a River', 'a Pond', 'an Ocean', 'a Bathtub', 'a Kiddies Swimming Pool', 'a Toilet', 'a Pile of Vomit', 'a Pool of Urine', 'a Kitchen Sink', 'a Bathroom Sink', 'a Mud Puddle', 'a Pail of Water', 'a Bowl of Jell-O', 'a Wash Basin', 'a Rain Barrel', 'an Aquarium', 'a SnowBank', 'a WaterFall', 'a Cup of Coffee', 'a Glass of Milk')
@@ -181,6 +175,7 @@ class HuntNFish(callbacks.Plugin):
                 else:
                     lose = ("oops, it got away, " + msg.nick)
                     irc.reply(lose)
+            self._fishers.append(player)
 
     def trophy(self,irc,msg,args):
         """
