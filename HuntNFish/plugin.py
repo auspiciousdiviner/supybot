@@ -77,8 +77,9 @@ class HuntNFish(callbacks.Plugin):
         player = msg.nick
         currentTime = time.time()
 
-        if self._huntersEndTime[player] > currentTime:
-            irc.reply("Hold on, your weapon is reloading...")
+        if player in self._huntersEndTime:
+            if self._huntersEndTime[player] > currentTime:
+                irc.reply("Hold on, your weapon is reloading...")
         else:
             endTime = currentTime + timeoutLength
             self._huntersTimeEnd[player] = endTime
@@ -134,8 +135,9 @@ class HuntNFish(callbacks.Plugin):
         player = msg.nick
         currentTime = time.time()
 
-        if self._fishersEndTime[player] > currentTime:
-            irc.reply("Hold on, still putting bait on your fishing pole...")
+        if player in self._fishersEndTime:
+            if self._fishersEndTime[player] > currentTime:
+                irc.reply("Hold on, still putting bait on your fishing pole...")
         else:
             endTime = currentTime + timeoutLength
             self._fishersTimeEnd[player] = endTime
