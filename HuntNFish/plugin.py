@@ -67,10 +67,10 @@ class HuntNFish(callbacks.Plugin):
         self._hunters = []
         self._fishers = []
 
-    def _new_hunter(hunter):
+    def _new_hunter(self, hunter):
         self._hunters.append(hunter)
 
-    def _new_fisher(fisher):
+    def _new_fisher(self, fisher):
         self._fishers.append(fisher)
 
     def hunt(self,irc,msg,args):
