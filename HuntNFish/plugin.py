@@ -54,8 +54,6 @@ except IOError:
     with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'w') as file:
         file.writelines('Nobody\n nothing\n2')
 
-timeoutLength = 30
-
 @internationalizeDocstring
 class HuntNFish(callbacks.Plugin):
     """Adds hunt and fish commands for a basic hunting and fishing game."""
@@ -74,6 +72,7 @@ class HuntNFish(callbacks.Plugin):
         performs a random hunt
         """
 
+        timeoutLength = self.registryValue('timeout')
         player = msg.nick
         currentTime = time.time()
 
@@ -131,6 +130,8 @@ class HuntNFish(callbacks.Plugin):
         """
         performs a random fishing trip
         """
+
+        timeoutLength = self.registryValue('timeout')
         player = msg.nick
         currentTime = time.time()
 

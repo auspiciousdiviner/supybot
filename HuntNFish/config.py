@@ -51,6 +51,7 @@ conf.registerChannelValue(HuntNFish, 'enable',
     registry.Boolean(True, _("""Turns on and off the hunt and fish commands.""")))
 conf.registerChannelValue(HuntNFish, 'successRate',
     registry.NonNegativeInteger(0, _("""Percent of chance of success""")))
-
+conf.registerChannelValue(HuntNFish, 'timeout',
+    registry.NonNegativeInteger(0, _("""How long the pause between hunts and fishs should be.""")))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
