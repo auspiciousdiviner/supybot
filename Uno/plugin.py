@@ -1,6 +1,7 @@
 ###
 # Uno/plugin.py
-# by SpiderDave
+# Originally by SpiderDave: https://github.com/SpiderDave/spidey-supybot-plugins
+# Improved by Wekeden
 ###
 
 
@@ -241,6 +242,10 @@ class _Plugin(callbacks.Plugin):
     tellstatus=wrap(tellstatus)
 
     def test(self,irc,msg,args):
+        """Takes no arguments.
+        
+        A command for who knows what...
+        """
         prefixChar = conf.supybot.reply.whenAddressedBy.chars()[0]
         irc.reply(chars)
     test=wrap(test)
