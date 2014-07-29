@@ -126,7 +126,7 @@ class HuntNFish(callbacks.Plugin):
                 if huntChance < successRate:
 
                     irc.reply("Way to go, {0}. You killed the {1}{2} {3}!".format( msg.nick, weight, weightType,
-                                                                                   currentWhat)
+                                                                                   currentWhat))
                     with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'r') as file:
                         data = file.readlines()
                         bigHunt = data[2].rstrip('\n')
