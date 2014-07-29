@@ -197,7 +197,7 @@ class HuntNFish(callbacks.Plugin):
                 random.setstate(fishrandom)
 
                 if huntChance < successRate:
-                    irc.reply("Way to go, {0}. You caught the {1}{2} {3}!".format(msg.nick, weight, weightType, currentWhat)
+                    irc.reply("Way to go, {0}. You caught the {1}{2} {3}!".format(msg.nick, weight, weightType, currentWhat))
                     with open(conf.supybot.directories.data.dirize('fishtrophy.txt'), 'r') as file:
                         data = file.readlines()
                         bigFish = data[2].rstrip('\n')
