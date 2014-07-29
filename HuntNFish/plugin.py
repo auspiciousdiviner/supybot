@@ -67,11 +67,12 @@ class HuntNFish(callbacks.Plugin):
         self._fishersEndTime = {}
 
 
-    def hunt(self,irc,msg,args):
+    def hunt(self,irc,msg,args, channel):
         """
         performs a random hunt
         """
 
+        channel = ircutils.toLower(channel)
         timeoutLength = self.registryValue('timeout')
         player = msg.nick
         currentTime = time.time()
@@ -145,12 +146,14 @@ class HuntNFish(callbacks.Plugin):
 
                 else:
                     irc.reply("Oops, you missed, {0}. You should get some glasses to fix that eyesight of yours".format(msg.nick))
-
-    def fish(self,irc,msg,args):
+    hunt = wrap(hunt, ['Channel'])
+    
+    def fish(self,irc,msg,args, channel):
         """
         performs a random fishing trip
         """
 
+        channel = ircutils.toLower(channel)
         timeoutLength = self.registryValue('timeout')
         player = msg.nick
         currentTime = time.time()
@@ -216,6 +219,7 @@ class HuntNFish(callbacks.Plugin):
 
                 else:
                     irc.reply("Oops, it got away, {0}. Don't quit your day job to become a fisher...".format(msg.nick))
+    fish = wrap(fish, ['Channel'])
 
     def trophy(self,irc,msg,args):
         """
