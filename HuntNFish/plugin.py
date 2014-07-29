@@ -159,7 +159,7 @@ class HuntNFish(callbacks.Plugin):
         currentTime = time.time()
 
         if player in self._fishersEndTime and self._fishersEndTime[player] > currentTime:
-            irc.reply("Hold on, still putting bait on your fishing pole...{0} more seconds left!".format(self._fishersEndTime[player] 
+            irc.reply("Hold on, still putting bait on your fishing pole... {0} more seconds left!".format(self._fishersEndTime[player] 
                                                                                                          - currentTime))
         else:
             endTime = currentTime + timeoutLength
