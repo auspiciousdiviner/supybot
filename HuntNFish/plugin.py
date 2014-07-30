@@ -74,7 +74,7 @@ class HuntNFish(callbacks.Plugin):
 
         channel = ircutils.toLower(channel)
         timeoutLength = self.registryValue('timeout')
-        player = msg.prefix
+        player = re.sub(msg.nick + r'!', '', msg.prefix) 
         currentTime = time.time()
 
         if player in self._huntersEndTime and self._huntersEndTime[player] > currentTime:
@@ -157,7 +157,7 @@ class HuntNFish(callbacks.Plugin):
 
         channel = ircutils.toLower(channel)
         timeoutLength = self.registryValue('timeout')
-        player = msg.prefix
+        player = re.sub(msg.nick + r'!', '', msg.prefix)
         currentTime = time.time()
 
         if player in self._fishersEndTime and self._fishersEndTime[player] > currentTime:
