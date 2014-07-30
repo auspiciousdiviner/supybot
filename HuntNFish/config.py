@@ -46,12 +46,14 @@ def configure(advanced):
 HuntNFish = conf.registerPlugin('HuntNFish')
 # This is where your configuration variables (if any) should go.  For example:
 conf.registerChannelValue(HuntNFish, 'WeightType',
-    registry.String('lb', _("""Determines what form of weight, metric or imperial, is used by the plugin. options are lb and kg.""")))
+    registry.String('lb', _("""Determines what form of weight, metric or imperial, is used by the plugin. Options are lb and kg.""")))
 conf.registerChannelValue(HuntNFish, 'enable',
     registry.Boolean(True, _("""Turns on and off the hunt and fish commands.""")))
 conf.registerChannelValue(HuntNFish, 'successRate',
     registry.NonNegativeInteger(0, _("""Percent of chance of success""")))
 conf.registerChannelValue(HuntNFish, 'timeout',
-    registry.NonNegativeInteger(0, _("""How long the pause between hunts and fishs should be.""")))
+    registry.NonNegativeInteger(0, _("""How long the pause between hunts and fishes should be.""")))
+conf.registerChannelValue(HuntNFish, 'channelTimeout',
+    registry.NonNegativeInteger(0, _("""How long the pause between hunts and fishes should be for a channel.""")))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
