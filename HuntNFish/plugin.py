@@ -65,8 +65,8 @@ class HuntNFish(callbacks.Plugin):
         self.__parent.__init__(irc)
         self._huntersEndTime = {}
         self._fishersEndTime = {}
-
-
+        
+        
     def hunt(self,irc,msg,args, channel):
         """
         performs a random hunt
@@ -74,12 +74,12 @@ class HuntNFish(callbacks.Plugin):
 
         channel = ircutils.toLower(channel)
         timeoutLength = self.registryValue('timeout')
-        player = msg.nick
+        player = msg.prefix
         currentTime = time.time()
 
         if player in self._huntersEndTime and self._huntersEndTime[player] > currentTime:
-            irc.reply("Hold on, your weapon is reloading... {0} more seconds left!".format(self._huntersEndTime[player] 
-                                                                                           - currentTime))
+            irc.reply("Hold on, your weapon is reloading... {0}".format(
+                      time.strftime("%M minute(s) and %S more second(s) left until we're ready!", self._huntersEndTime[player] - currentTime)))
         else:
             endTime = currentTime + timeoutLength
             self._huntersEndTime[player] = endTime
@@ -96,8 +96,9 @@ class HuntNFish(callbacks.Plugin):
                            'alligator', 'crocidile', 'beached whale', 'parked car', 'tree', 'trash can',
                            'soda can', 'lynx', 'coyote', 'dingo', 'feral dog', 'feral cat', 'white tiger',
                            'tapir', 'parrot', 'hawk', 'eagle', 'bald eagle', 'falcon', 'pig', 'boar', 'brahmin',
-                           'yao guai', 'deathclaw', 'golden gecko', 'hydra', 'snake', 'house']
-                animals.extend(list(irc.state.channels[channel].users))
+                           'yao guai', 'deathclaw', 'golden gecko', 'hydra', 'snake', 'house', 'skyscraper',
+                           'draugr', 'sheep', 'goat', ]
+
                 places = ['in some bushes', 'in a hunting blind', 'in a hole', 'up in a tree', 
                           'in a hiding place', 'out in the open', 'in the middle of a field',
                           'downtown', 'on a street corner', 'at the local mall', 'in a residential neighborhood',
@@ -113,7 +114,7 @@ class HuntNFish(callbacks.Plugin):
                 random.seed(time.time())
                 currentWhat = random.choice(animals)
                 currentWhere = random.choice(places)
-                weight = random.randint(int(highScore)/2,int(highScore)+11)
+                weight = random.randint(int(highScore)/2,int(highScore)+13)
                 weightType = self.registryValue('weightType')
                 irc.reply("{0} goes hunting {1} for a {2}{3} {4}...".format(msg.nick, currentWhere, weight, weightType,
                                                                             currentWhat))
@@ -155,12 +156,12 @@ class HuntNFish(callbacks.Plugin):
 
         channel = ircutils.toLower(channel)
         timeoutLength = self.registryValue('timeout')
-        player = msg.nick
+        player = msg.prefix
         currentTime = time.time()
 
         if player in self._fishersEndTime and self._fishersEndTime[player] > currentTime:
-            irc.reply("Hold on, still putting bait on your fishing pole... {0} more seconds left!".format(self._fishersEndTime[player] 
-                                                                                                         - currentTime))
+            irc.reply("Hold on, still putting bait on your fishing pole... {0}".format(
+                      time.strftime("%M minute(s) and %S more second(s) left until we're ready!", self._fishersEndTime[player] - currentTime)))
         else:
             endTime = currentTime + timeoutLength
             self._fishersEndTime[player] = endTime
@@ -173,7 +174,9 @@ class HuntNFish(callbacks.Plugin):
                           'Dolphin',  'Porpoise' , 'Stingray', 'Submarine', 'Seal', 'Seahorse', 'Jellyfish', 
                           'Starfish', 'Electric Eel', 'Great White Shark', 'Scuba Diver' , 'Lag Monster', 
                           'Virus', 'Soggy Pack of Smokes', 'Bag of Weed', 'Boat Anchor', 'Pair Of Floaties', 
-                          'Mermaid', 'Merman', 'Halibut', 'Tiddler', 'Sock', 'Trout', 'Blinky the Fish', 'Chthulu')
+                          'Mermaid', 'Merman', 'Halibut', 'Tiddler', 'Sock', 'Trout', 'Blinky the Fish', 'Chthulu',
+                          'Magikarp', 'Seaking', 'Narwhal', 'Orca whale', 'Old Gym Sock', 'Octopus', 'Kraken',
+                          'Plastic Bag of Water', 'Eel', 'Rusty Pipe', 'Dog Collar', 'Pair of Pants')
                           
                 fishSpots = ('a Stream', 'a Lake', 'a River', 'a Pond', 'an Ocean', 'a Bathtub', 
                              'a Kiddies Swimming Pool', 'a Toilet', 'a Pile of Vomit', 'a Pool of Urine', 
@@ -189,7 +192,7 @@ class HuntNFish(callbacks.Plugin):
                 random.seed(time.time())
                 currentWhat = random.choice(fishes)
                 currentWhere = random.choice(fishSpots)
-                weight = random.randint(int(highScore)/3,int(highScore)+11)
+                weight = random.randint(int(highScore)/2,int(highScore)+13)
                 weightType = self.registryValue('weightType')
                 irc.reply("{0} goes fishing in {1}.".format(msg.nick, currentWhere))
                 irc.reply("Casts a line in....")
