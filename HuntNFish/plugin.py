@@ -79,7 +79,8 @@ class HuntNFish(callbacks.Plugin):
 
         if player in self._huntersEndTime and self._huntersEndTime[player] > currentTime:
             irc.reply("Hold on, your weapon is reloading... {0}".format(
-                      time.strftime("%M minute(s) and %S more second(s) left until we're ready!", self._huntersEndTime[player] - currentTime)))
+                      time.strftime("%M minute(s) and %S more second(s) left until we're ready!", time.gmtime(self._huntersEndTime[player]
+                                                                                                              - currentTime))))
         else:
             endTime = currentTime + timeoutLength
             self._huntersEndTime[player] = endTime
@@ -161,7 +162,8 @@ class HuntNFish(callbacks.Plugin):
 
         if player in self._fishersEndTime and self._fishersEndTime[player] > currentTime:
             irc.reply("Hold on, still putting bait on your fishing pole... {0}".format(
-                      time.strftime("%M minute(s) and %S more second(s) left until we're ready!", self._fishersEndTime[player] - currentTime)))
+                      time.strftime("%M minute(s) and %S more second(s) left until we're ready!", time.gmtime(self._fishersEndTime[player]
+                                                                                                              - currentTime))))
         else:
             endTime = currentTime + timeoutLength
             self._fishersEndTime[player] = endTime
