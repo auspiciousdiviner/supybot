@@ -28,6 +28,10 @@
 
 ###
 
+import urllib
+from urllib import request 
+from bs4 import BeautifulSoup
+
 import supybot.utils as utils
 from supybot.commands import *
 import supybot.plugins as plugins
@@ -45,6 +49,36 @@ class PoIEpisodeDirectory(callbacks.Plugin):
     """Add the help for "@plugin help PoIEpisodeDirectory" here
     This should describe *how* to use this plugin."""
     pass
+
+    def __init__(self, irc):
+        self.__parent = super(Random, self)
+        self.__parent.__init__(irc)
+        self.episodes_url_path = "http://www.tv.com/shows/person-of-interest-2011/episodes/"
+        self.episodes_season_url_path = "http://www.tv.com/shows/person-of-interest-2011/{0}" 
+        
+    def poi(self, irc, msg, args, season, episode):
+        """<season> <episode>
+        
+        Gets the synopsis of Person of Interest episode <episode> of season <season>.
+        """
+        
+        req = urllib.request.Request(
+            self.episodes_season_url_path + season,
+            data=None,
+            headers={
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36'
+            }
+        )
+
+        soup = BeautifulSoup(urllib.request.urlopen(req).read())
+         
+        element = soup.find("ul", class_="filters")
+         
+        for element1 in element.find_all("strong"):
+            if element1.get_text() != 'All':
+            irc.reply(element1.get_text()) 
+        
+    poi = wrap(poi, ['text', 'int', 'int'])
 
 
 Class = PoIEpisodeDirectory
