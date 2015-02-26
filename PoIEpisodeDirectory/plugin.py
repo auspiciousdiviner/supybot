@@ -54,7 +54,7 @@ class PoIEpisodeDirectory(callbacks.Plugin):
         self.__parent = super(Random, self)
         self.__parent.__init__(irc)
         self.episodes_url_path = "http://www.tv.com/shows/person-of-interest-2011/episodes/"
-        self.episodes_season_url_path = "http://www.tv.com/shows/person-of-interest-2011/{0}" 
+        self.episodes_season_url_path = "http://www.tv.com/shows/person-of-interest-2011/" 
         
     def poi(self, irc, msg, args, season, episode):
         """<season> <episode>
@@ -63,7 +63,7 @@ class PoIEpisodeDirectory(callbacks.Plugin):
         """
         
         req = urllib.request.Request(
-            self.episodes_season_url_path + season,
+            "%sseason-%d".format(self.episodes_season_url_path, season),
             data=None,
             headers={
                 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36'
