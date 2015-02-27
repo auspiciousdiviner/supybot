@@ -76,7 +76,7 @@ class PoIEpisodeDirectory(callbacks.Plugin):
          
         for element1 in element.find_all("strong"):
             if element1.get_text() != 'All':
-            irc.reply(element1.get_text()) 
+                irc.reply(element1.get_text()) 
         
     poi = wrap(poi, ['text', 'int', 'int'])
 
