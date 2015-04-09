@@ -96,7 +96,7 @@ class Mathbomb(callbacks.Plugin):
                     wire_equations.append("{0} <{1}>".format(wire, self._generate_equation()[1]))
             
             s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! The solution is %s  There are %s wires.  They are: %s.' 
-                % (self.victim, self.detonateTime, return_val[0], len(wire_equations), utils.str.commaAndify(wire_equations))
+            % (self.victim, self.detonateTime, return_val[0], len(wire_equations), utils.str.commaAndify(wire_equations))
                 
             self.irc.queueMsg(ircmsgs.action(self.channel, s))
             if self.victim == irc.nick:
