@@ -96,6 +96,18 @@ class Mathbomb(callbacks.Plugin):
                 time.sleep(1)
                 self.cutwire(self.irc, cutWire)
 
+        def _generate_equation_from_number(self):
+            forms [
+                
+                '{0} + {1} * {2}',
+                '{0} + {1} * {2}',
+                '{0} + {1} * {2}',
+                '{0} + {1} * {2}',
+                '{0} + {1} * {2}',
+                '{0} + {1} * {2}',
+                
+            ]
+
         def cutwire(self, irc, cutWire):
             self.cutWire = cutWire
             self.responded = True
