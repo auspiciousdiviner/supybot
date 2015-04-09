@@ -87,7 +87,17 @@ class Mathbomb(callbacks.Plugin):
             def detonate():
                 self.detonate(irc)
             schedule.addEvent(detonate, time.time() + self.detonateTime, '%s_bomb' % self.channel)
-            s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds!  There are %s wires.  They are: %s.' % (self.victim, self.detonateTime, len(wires), utils.str.commaAndify(wires))
+            
+            return_val = self._generate_equation()
+            
+            wire_equations = ["{0} <{1}>".format(goodWire, return_val[1])]
+            for wire in wires:
+                if wire != goodWire:
+                    wire_equations.append("{0} <{1}>".format(wire, self._generate_equation()[1]))
+            
+            s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! The solution is %s  There are %s wires.  They are: %s.' 
+                % (self.victim, self.detonateTime, return_val[0], len(wire_equations), utils.str.commaAndify(wire_equations))
+                
             self.irc.queueMsg(ircmsgs.action(self.channel, s))
             if self.victim == irc.nick:
                 time.sleep(1)
@@ -96,17 +106,60 @@ class Mathbomb(callbacks.Plugin):
                 time.sleep(1)
                 self.cutwire(self.irc, cutWire)
 
-        def _generate_equation_from_number(self):
-            forms [
+        def _generate_equation(self):
+            forms = [
                 
-                '{0} + {1} * {2}',
-                '{0} + {1} * {2}',
-                '{0} + {1} * {2}',
-                '{0} + {1} * {2}',
-                '{0} + {1} * {2}',
-                '{0} + {1} * {2}',
+                '{0} added to {1}',
+                '{0} subt {1}',
+                '{0} mult {1}',
+                '{0} divd {1}',
+                '{0} added to {1} added to {2}',
+                '{0} added to {1} subt {2}',
+                '{0} added to ({1} mult {2})',
+                '{0} added to ({1} divd {2})',
+                '{0} subt {1} added to {2}',
+                '{0} subt {1} subt {2}',
+                '{0} subt ({1} mult {2})',
+                '{0} subt ({1} divd {2})',
+                '{0} mult {1} added to {2}',
+                '{0} mult {1} subt {2}',
+                '{0} mult {1} mult {2}',
+                '({0} mult {1}) divd {2}',
+                '({0} divd {1}) added to {2}',
+                '({0} divd {1}) subt {2}',
+                '({0} divd {1}) mult {2}',
+                '{0} added to {1} added to {2} added to {3}',
+                '{0} added to {1} subt {2} subt {3}',
+                '{0} added to ({1} mult {2} mult {3})',
+                '{0} subt {1} added to {2} added to {3}',
+                '{0} subt {1} subt {2} subt {3}',
+                '{0} subt ({1} mult {2} mult {3})',
+                '({0} mult {1}) added to {2} added to {3}',
+                '({0} mult {1}) subt {2} subt {3}',
+                '{0} mult {1} mult {2} mult {3}',
+                '{0} added to {1} added to {2} added to {3} mult {4}',
+                '{0} added to {1} subt {2} subt {3} mult {4}',
+                '{0} added to ({1} mult {2} mult {3}) mult {4}',
+                '{0} subt {1} added to {2} added to {3} mult {4}',
+                '{0} subt {1} subt {2} subt {3} mult {4}',
+                '{0} subt ({1} mult {2} mult {3}) mult {4}',
+                '({0} mult {1}) added to {2} added to {3} mult {4}',
+                '({0} mult {1}) subt {2} subt {3} mult {4}',
+                '{0} mult {1} mult {2} mult {3} mult {4}',
                 
             ]
+            
+            form = random.choice(forms)
+            
+            number1 = random.randrange(0, 21)
+            number2 = random.randrange(0, 21)
+            number3 = random.randrange(0, 21)
+            number4 = random.randrange(0, 21)
+            equation = form.format(number1, number2, number3, number4)
+            
+            solution = eval(equation)
+            
+            return [solution, equation]
 
         def cutwire(self, irc, cutWire):
             self.cutWire = cutWire
