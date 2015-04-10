@@ -102,8 +102,17 @@ class Mathbomb(callbacks.Plugin):
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'There are %s wires.' % len(wire_equations)))
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'They are:'))
 
+            count = 0
             for wire in wire_equations:
-                self.irc.queueMsg(ircmsgs.privmsg(self.channel, wire))
+                
+                if count + 2 < wires:
+                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commAndify(wire_equations[count:count+3])))
+                elif count + 1 < wires:
+                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commAndify(wire_equations[count:count+2])))
+                else:
+                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commAndify(wire)))
+                    
+                count = count + 3
 
             if self.victim == irc.nick:
                 time.sleep(1)
