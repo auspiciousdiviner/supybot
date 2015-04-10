@@ -97,6 +97,7 @@ class Mathbomb(callbacks.Plugin):
             
             s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! ' % (self.victim, self.detonateTime)
                 
+            self.irc.queueMsg(ircmsgs.action(self.channel, s))
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'The solution is %s.' % return_val[0]))
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'There are %s wires.' % len(wire_equations)))
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'They are:'))
