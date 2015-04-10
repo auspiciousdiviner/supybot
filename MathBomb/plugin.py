@@ -90,7 +90,7 @@ class Mathbomb(callbacks.Plugin):
             
             return_val = self._generate_equation()
             
-            wire_equations = ["{0} {1}".format(goodWire, return_val[1])]
+            wire_equations = ["{0}: {1}".format(goodWire, return_val[1])]
             for wire in wires:
                 if wire != goodWire:
                     wire_equations.append("{0}: {1}".format(wire, self._generate_equation()[1]))
