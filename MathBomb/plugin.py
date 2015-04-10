@@ -106,11 +106,11 @@ class Mathbomb(callbacks.Plugin):
             for wire in wire_equations:
                 
                 if count + 2 < wires:
-                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commAndify(wire_equations[count:count+3])))
+                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commaAndify(wire_equations[count:count+3])))
                 elif count + 1 < wires:
-                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commAndify(wire_equations[count:count+2])))
+                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commaAndify(wire_equations[count:count+2])))
                 else:
-                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commAndify(wire)))
+                    self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commaAndify(wire)))
                     
                 count = count + 3
 
