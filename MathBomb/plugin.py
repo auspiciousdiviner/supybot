@@ -90,7 +90,7 @@ class Mathbomb(callbacks.Plugin):
             
             return_val = self._generate_equation()
             
-            wire_equations = ["{0} <{1}>".format(goodWire, return_val[1])]
+            wire_equations = ["{0} {1}".format(goodWire, return_val[1])]
             for wire in wires:
                 if wire != goodWire:
                     wire_equations.append("{0}: {1}".format(wire, self._generate_equation()[1]))
@@ -102,7 +102,9 @@ class Mathbomb(callbacks.Plugin):
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'There are %s wires.' % len(wire_equations)))
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'They are:'))
 
-            count = 0
+            wire_equations = random.sample(wire_equations, wires)
+            chunk_size = 2
+            equation_chunks = [wire_equations[i:i+chunk_size] for i in range(0, wires, chunk_size)]
             for wire in wire_equations:
                 
                 if count + 2 < wires:
