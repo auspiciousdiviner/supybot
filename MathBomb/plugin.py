@@ -93,11 +93,17 @@ class Mathbomb(callbacks.Plugin):
             wire_equations = ["{0} <{1}>".format(goodWire, return_val[1])]
             for wire in wires:
                 if wire != goodWire:
-                    wire_equations.append("{0} <{1}>".format(wire, self._generate_equation()[1]))
+                    wire_equations.append("{0}: {1}".format(wire, self._generate_equation()[1]))
             
-            s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! The solution is %s  There are %s wires.  They are: %s.' % (self.victim, self.detonateTime, return_val[0], len(wire_equations), utils.str.commaAndify(wire_equations))
+            s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! ' % (self.victim, self.detonateTime)
                 
-            self.irc.queueMsg(ircmsgs.action(self.channel, s))
+            self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'The solution is %s.' % return_val[0]))
+            self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'There are %s wires.' % len(wire_equations)))
+            self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'They are:'))
+
+            for wire in wire_equations:
+                self.irc.queueMsg(ircmsgs.privmsg(self.channel, wire))
+
             if self.victim == irc.nick:
                 time.sleep(1)
                 cutWire = self.rng.choice(self.wires)
