@@ -156,16 +156,24 @@ class Mathbomb(callbacks.Plugin):
                 '({0} * {1}) + {2} + {3} * {4}',
                 '({0} * {1}) - {2} - {3} * {4}',
                 '{0} * {1} * {2} * {3} * {4}',
+                '{0} % {1}',
+                '{0} + ({1} % {2})',
+                '{0} - ({1} % {2})',
+                '({0} * {1}) % {2} + ({3} * {4})',
+                '({0} % {1}) + {2} - ({3} * {4})',
+                '({0} % {1}) - {2} / ({3} % {4})',
+                '({0} % {1}) * {2} * ({3} * {4})',
+                '({0} % {1}) * {2} * ({3} % {4})',
                 
             ]
             
             form = random.choice(forms)
             
-            number1 = 1 + random.random() * 21
-            number2 = 1 + random.random() * 21
-            number3 = 1 + random.random() * 21
-            number4 = 1 + random.random() * 21
-            number5 = 1 + random.random() * 21
+            number1 = random.randrange(1, 21)
+            number2 = random.randrange(1, 21)
+            number3 = random.randrange(1, 21)
+            number4 = random.randrange(1, 21)
+            number5 = random.randrange(1, 21)
             equation = form.format(number1, number2, number3, number4, number5)
             
             solution = eval(equation)
