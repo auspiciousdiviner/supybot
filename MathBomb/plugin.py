@@ -102,9 +102,9 @@ class Mathbomb(callbacks.Plugin):
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'There are %s wires.' % len(wire_equations)))
             self.irc.queueMsg(ircmsgs.privmsg(self.channel, 'They are:'))
 
-            wire_equations = random.sample(wire_equations, wires)
+            wire_equations = random.sample(wire_equations, len(wire_equations))
             chunk_size = 4
-            equation_chunks = [wire_equations[i:i+chunk_size] for i in range(0, wires, chunk_size)]
+            equation_chunks = [wire_equations[i:i+chunk_size] for i in range(0, len(wire_equations), chunk_size)]
             for chunk in equation_chunks:
                 self.irc.queueMsg(ircmsgs.privmsg(self.channel, utils.str.commaAndify(chunk)))
 
