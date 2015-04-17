@@ -41,13 +41,13 @@ import supybot.schedule as schedule
 import supybot.callbacks as callbacks
 
 
-class Mathbomb(callbacks.Plugin):
-    """Add the help for "@plugin help Mathbomb" here
+class Regexbomb(callbacks.Plugin):
+    """Add the help for "@plugin help Regexbomb" here
     This should describe *how* to use this plugin."""
     threaded = True
     
     def __init__(self, irc):
-        self.__parent = super(Mathbomb, self)
+        self.__parent = super(Regexbomb, self)
         self.__parent.__init__(irc)
         self.rng = random.Random()
         self.rng.seed()
@@ -256,7 +256,7 @@ class Mathbomb(callbacks.Plugin):
         """
         channel = ircutils.toLower(channel)
         if not self.registryValue('allowBombs', msg.args[0]):
-            irc.reply('Mathbombs aren\'t allowed in this channel.  Set plugins.Mathbomb.allowBombs to true if you want them.')
+            irc.reply('Regexbombs aren\'t allowed in this channel.  Set plugins.Regexbomb.allowBombs to true if you want them.')
             return
         try:
             if self.bombs[channel].active:
@@ -310,13 +310,13 @@ class Mathbomb(callbacks.Plugin):
     randombomb = wrap(randombomb, ['Channel', any('NickInChannel')])
 
  
-    def mathbomb(self, irc, msg, args, channel, victim):
+    def regexbomb(self, irc, msg, args, channel, victim):
         """<nick>
 
         For bombing people!"""
         channel = ircutils.toLower(channel)
         if not self.registryValue('allowBombs', msg.args[0]):
-            irc.reply('Mathbombs aren\'t allowed in this channel.  Set plugins.Mathbomb.allowBombs to true if you want them.')
+            irc.reply('Regexbombs aren\'t allowed in this channel.  Set plugins.Regexbomb.allowBombs to true if you want them.')
             return
         try:
             if self.bombs[channel].active:
@@ -348,14 +348,14 @@ class Mathbomb(callbacks.Plugin):
             irc.reply('I\'m about to create a bomb in %s' % channel)
         self.bombs[channel] = self.Bomb(irc, victim, wires, detonateTime, goodWire, channel, msg.nick, self.registryValue('showArt', msg.args[0]), self.registryValue('showCorrectWire', msg.args[0]), self.registryValue('debug'))
         if self.registryValue('debug'):
-            irc.reply('This message means that I got past the bomb creation line in the mathbomb command')
-    mathbomb = wrap(mathbomb, ['Channel', ('checkChannelCapability', 'mathbombs'), 'somethingWithoutSpaces'])
+            irc.reply('This message means that I got past the bomb creation line in the regexbomb command')
+    regexbomb = wrap(regexbomb, ['Channel', ('checkChannelCapability', 'regexbombs'), 'somethingWithoutSpaces'])
 
 
     def cutwire(self, irc, msg, args, channel, cutWire):
         """<colored wire>
 
-        Will cut the given wire if you've been mathbombed."""
+        Will cut the given wire if you've been regexbombed."""
         channel = ircutils.toLower(channel)
         try:
             if not self.bombs[channel].active:
@@ -386,7 +386,7 @@ class Mathbomb(callbacks.Plugin):
     detonate = wrap(detonate, [('checkChannelCapability', 'op')])
 
 
-Class = Mathbomb
+Class = Regexbomb
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
