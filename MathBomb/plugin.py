@@ -93,7 +93,7 @@ class Mathbomb(callbacks.Plugin):
             wire_equations = ["{0}: {1}".format(goodWire, return_val[1])]
             for wire in wires:
                 if wire != goodWire:
-                    wire_equations.append("{0}: {1}".format(wire, self._generate_equation()[1]))
+                    wire_equations.append("{0}: {1}".format(wire, self._generate_equation_that_is_not_this_solution(return_val[0])[1]))
             
             s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! ' % (self.victim, self.detonateTime)
                 
@@ -169,16 +169,37 @@ class Mathbomb(callbacks.Plugin):
             
             form = random.choice(forms)
             
-            number1 = random.randrange(1, 21)
-            number2 = random.randrange(1, 21)
-            number3 = random.randrange(1, 21)
-            number4 = random.randrange(1, 21)
-            number5 = random.randrange(1, 21)
-            equation = form.format(number1, number2, number3, number4, number5)
+            no_divide_by_zero_exceptions = False
             
-            solution = eval(equation)
+            solution = 0
+            equation = ""
+            
+            while no_divide_by_zero_exceptions == False:
+                number1 = random.randrange(1, 21)
+                number2 = random.randrange(1, 21)
+                number3 = random.randrange(1, 21)
+                number4 = random.randrange(1, 21)
+                number5 = random.randrange(1, 21)
+                equation = form.format(number1, number2, number3, number4, number5)
+                
+                try:
+                    solution = eval(equation)
+                    no_divide_by_zero_exceptions = True
+                    
+                except ZeroDivisionError:
+                    pass
             
             return [solution, equation]
+
+        def _generate_equation_that_is_not_this_solution(self, solution):
+            
+            pair = self._generate_equation()
+            
+            while pair[0] == solution:
+                pair = self._generate_equation()
+                
+            return pair
+                 
 
         def cutwire(self, irc, cutWire):
             self.cutWire = cutWire
