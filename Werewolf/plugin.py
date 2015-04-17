@@ -74,14 +74,10 @@ class Werewolf(callbacks.Plugin):
     seer_intro = ("You are the seer! You have been granted great insight to discover the true intentions of each player. After every night you can find out "+
             "what the real identity of a player is. Try to keep your "+
             "own identity secret or the werewolves will most likely "+
-            "kill you "+
-            "in the night. You can try to lead the discussion into "+
-            "the right "+
-            "direction though. Apart from your abilities to "+
-            "reveal other "+
-            "players identities you are a normal villager and will "+
-            "only win if"+
-            " the villagers win.")
+            "kill you in the night. You can try to lead the discussion into "+
+            "the right direction though. Apart from your abilities to "+
+            "reveal other players identities you are a normal villager and will "+
+            "only win if the villagers win.")
             
     werewolves_intro = ("You are a werewolf! Your beastly blood allows you to transform into a terrifying hybrid of Man and Wolf. Don't tell anybody! "+
             "You have to kill all villagers. Hide your identity in "+
@@ -99,8 +95,7 @@ class Werewolf(callbacks.Plugin):
             
     shooter_intro = ("You are the shooter. Given an old rifle used by your grandpa in the old WW2, you use it to carry out vigilante justice in your village. You can shoot at another player "+
             "every morning. If you hit a villager, he is wounded and can't "+
-            "vote in the "+
-            "public elections anymore. If you hit a werewolf or the seer, they will die. "+
+            "vote in the public elections anymore. If you hit a werewolf or the seer, they will die. "+
             "Therefore, it may be wise to choose to not shoot anyone at all. "+
             "You are a normal villager apart from that, and will only win if "+
             "the villagers win.")
@@ -170,7 +165,7 @@ class Werewolf(callbacks.Plugin):
         
     listscores = wrap(listscores)
         
-    def startgame(self, irc, msg, args):
+    def start(self, irc, msg, args):
         """takes no arguments
         
         Starts the game and allows other players to join with 'joingame'.
@@ -197,24 +192,24 @@ class Werewolf(callbacks.Plugin):
         else:
             irc.reply("A game has already been started or is running!")
 
-    start = wrap(startgame)
-    startgame = wrap(startgame)
+    start = wrap(start)
     
     def addbot( self, irc, msg, args ):
     
+        irc.reply("Bot added", to=self.gamechannel)
         self.bots = self.bots + 1
     
-    seed = wrap(seed)
+    addbot = wrap(addbot)
     
     def removebot( self, irc, msg, args ):
     
         if self.bots <= 0:
-            irc.reply("You can not have a negative number of bots playing!")
+            irc.reply("You can not have a negative number of bots playing!", to=self.gamechannel)
             
         else:
             self.bots = self.bots + 1
     
-    seed = wrap(seed)
+    removebot = wrap(removebot)
 
     def tellrulesto(self, irc, msg, args, nickname):
         """<nickname>
@@ -227,7 +222,7 @@ class Werewolf(callbacks.Plugin):
     tellrulesto = wrap(tellrulesto, ['text'])
     
     
-    def leavegame(self, irc, msg, args):
+    def leave(self, irc, msg, args):
         """takes no arguments
         
         allows the caller to leave the game"""
@@ -259,7 +254,7 @@ class Werewolf(callbacks.Plugin):
                         self._phase_night(irc, msg, args)
                         return
     
-    leavegame = wrap(leavegame)
+    leave = wrap(leave)
     
     def doPart(self, irc, msg):
         if msg.nick in self.playerlist:
@@ -297,7 +292,7 @@ class Werewolf(callbacks.Plugin):
         
     tellrules = wrap(tellrules)
     
-    def joingame(self, irc, msg, args):
+    def join(self, irc, msg, args):
         """takes no arguments
         
         Allows players to join the game."""
@@ -322,8 +317,7 @@ class Werewolf(callbacks.Plugin):
             irc.reply("Nobody started a round yet. Use the 'startgame' "+
             "command to start a new round!")
     
-    join = wrap(joingame)
-    joingame = wrap(joingame)
+    join = wrap(join)
     
     def listplayers(self, irc, msg, args):
         """takes no arguments
@@ -355,7 +349,7 @@ class Werewolf(callbacks.Plugin):
             
     whatami = wrap(whatami)
     
-    def begingame(self, irc, msg, args):
+    def begin(self, irc, msg, args):
         """takes no arguments
         
         Begins the round after a 'startgame'"""
@@ -369,7 +363,7 @@ class Werewolf(callbacks.Plugin):
             
         if len(self.playerlist) < 3:
             irc.reply("There are not enough players to start the game. "+
-            "You need at least 3 players to start the game, due to how impossible it is to play with this many players.")
+            "You need at least 3 players to start the game, due to how impossible it is to play with this few players.")
             return
         else:
             #join phase is over
@@ -442,11 +436,8 @@ class Werewolf(callbacks.Plugin):
             "night.", to=self.gamechannel, prefixNick=False)
             self._phase_morning(irc, msg, args)
 
-    start = wrap(begingame)
-    begingame = wrap(begingame)
-        
-        
-            
+    begin = wrap(begin)
+             
     def _game_over(self, irc, msg, args):
         irc.reply("The game is over!", to=self.gamechannel, prefixNick=False)
         if len(self.wolves) == 0:
@@ -608,6 +599,7 @@ class Werewolf(callbacks.Plugin):
     lynch = wrap(votekill, ['text'])
     shoot = wrap(votekill, ['text'])
     votekill = wrap(votekill, ['text'])
+    kill = wrap(votekill, ['text'])
     
     
     def _vote_countdown(self, irc, msg, args):
