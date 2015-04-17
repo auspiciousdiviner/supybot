@@ -187,7 +187,7 @@ class Mathbomb(callbacks.Plugin):
                     no_divide_by_zero_exceptions = True
                     
                 except ZeroDivisionError:
-                    #Suppress!
+                    pass
             
             return [solution, equation]
 
