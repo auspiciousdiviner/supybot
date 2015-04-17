@@ -169,14 +169,25 @@ class Mathbomb(callbacks.Plugin):
             
             form = random.choice(forms)
             
-            number1 = random.randrange(1, 21)
-            number2 = random.randrange(1, 21)
-            number3 = random.randrange(1, 21)
-            number4 = random.randrange(1, 21)
-            number5 = random.randrange(1, 21)
-            equation = form.format(number1, number2, number3, number4, number5)
+            no_divide_by_zero_exceptions = False
             
-            solution = eval(equation)
+            solution = 0
+            equation = ""
+            
+            while no_divide_by_zero_exceptions == False:
+                number1 = random.randrange(1, 21)
+                number2 = random.randrange(1, 21)
+                number3 = random.randrange(1, 21)
+                number4 = random.randrange(1, 21)
+                number5 = random.randrange(1, 21)
+                equation = form.format(number1, number2, number3, number4, number5)
+                
+                try:
+                    solution = eval(equation)
+                    no_divide_by_zero_exceptions = True
+                    
+                except ZeroDivisionError:
+                    #Suppress!
             
             return [solution, equation]
 
