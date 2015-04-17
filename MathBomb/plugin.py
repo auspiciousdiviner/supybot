@@ -93,7 +93,7 @@ class Mathbomb(callbacks.Plugin):
             wire_equations = ["{0}: {1}".format(goodWire, return_val[1])]
             for wire in wires:
                 if wire != goodWire:
-                    wire_equations.append("{0}: {1}".format(wire, self._generate_equation()[1]))
+                    wire_equations.append("{0}: {1}".format(wire, self._generate_equation_that_is_not_this_solution(return_val[0])[1]))
             
             s = 'stuffs a bomb down %s\'s pants.  The timer is set for %s seconds! ' % (self.victim, self.detonateTime)
                 
@@ -179,6 +179,16 @@ class Mathbomb(callbacks.Plugin):
             solution = eval(equation)
             
             return [solution, equation]
+
+        def _generate_equation_that_is_not_this_solution(self, solution):
+            
+            pair = _generate_equation()
+            
+            while pair[0] =! solution:
+                pair = _generate_equation()
+                
+            return pair
+                 
 
         def cutwire(self, irc, cutWire):
             self.cutWire = cutWire
