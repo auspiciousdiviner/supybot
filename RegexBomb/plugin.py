@@ -116,69 +116,11 @@ class Regexbomb(callbacks.Plugin):
                 time.sleep(1)
                 self.cutwire(self.irc, cutWire)
 
-        def _generate_equation(self):
-            forms = [
-                
-                '{0} + {1}',
-                '{0} - {1}',
-                '{0} * {1}',
-                '{0} // {1}',
-                '{0} + {1} + {2}',
-                '{0} + {1} - {2}',
-                '{0} + ({1} * {2})',
-                '{0} + ({1} // {2})',
-                '{0} - {1} + {2}',
-                '{0} - {1} - {2}',
-                '{0} - ({1} * {2})',
-                '{0} - ({1} // {2})',
-                '{0} * {1} + {2}',
-                '{0} * {1} - {2}',
-                '{0} * {1} * {2}',
-                '({0} * {1}) // {2}',
-                '({0} // {1}) + {2}',
-                '({0} // {1}) - {2}',
-                '({0} // {1}) * {2}',
-                '{0} + {1} + {2} + {3}',
-                '{0} + {1} - {2} - {3}',
-                '{0} + ({1} * {2} * {3})',
-                '{0} - {1} + {2} + {3}',
-                '{0} - {1} - {2} - {3}',
-                '{0} - ({1} * {2} * {3})',
-                '({0} * {1}) + {2} + {3}',
-                '({0} * {1}) - {2} - {3}',
-                '{0} * {1} * {2} * {3}',
-                '{0} + {1} + {2} + {3} * {4}',
-                '{0} + {1} - {2} - {3} * {4}',
-                '{0} + ({1} * {2} * {3}) * {4}',
-                '{0} - {1} + {2} + {3} * {4}',
-                '{0} - {1} - {2} - {3} * {4}',
-                '{0} - ({1} * {2} * {3}) * {4}',
-                '({0} * {1}) + {2} + {3} * {4}',
-                '({0} * {1}) - {2} - {3} * {4}',
-                '{0} * {1} * {2} * {3} * {4}',
-                '{0} % {1}',
-                '{0} + ({1} % {2})',
-                '{0} - ({1} % {2})',
-                '({0} * {1}) % {2} + ({3} * {4})',
-                '({0} % {1}) + {2} - ({3} * {4})',
-                '({0} % {1}) - {2} / ({3} % {4})',
-                '({0} % {1}) * {2} * ({3} * {4})',
-                '({0} % {1}) * {2} * ({3} % {4})',
-                
-            ]
+        def _generate_string(self):
             
-            form = random.choice(forms)
+            return ''.join(random.choice(string.ascii_uppercase + ' ') for i in range(random.randrange(1,20)))
             
-            number1 = random.randrange(1, 21)
-            number2 = random.randrange(1, 21)
-            number3 = random.randrange(1, 21)
-            number4 = random.randrange(1, 21)
-            number5 = random.randrange(1, 21)
-            equation = form.format(number1, number2, number3, number4, number5)
-            
-            solution = eval(equation)
-            
-            return [solution, equation]
+        def
 
         def cutwire(self, irc, cutWire):
             self.cutWire = cutWire
