@@ -184,7 +184,7 @@ class Mathbomb(callbacks.Plugin):
             
             pair = self._generate_equation()
             
-            while pair[0] =! solution:
+            while pair[0] != solution:
                 pair = self._generate_equation()
                 
             return pair
