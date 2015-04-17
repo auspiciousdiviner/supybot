@@ -32,7 +32,7 @@
 # Shamelessly borrowed from quantumlemur! https://github.com/quantumlemur
 
 """
-Allows you to 'mathbomb' people in the channel.  If they get the get the wire (Solution or Equation)
+Allows you to 'regexbomb' people in the channel.  If they get the get the wire (Match to a random regex based on a string)
 wrong, they get kicked.  (It's a game)
 """
 
@@ -52,7 +52,7 @@ __author__ = supybot.Author('wekeden', 'wekeden',
 __contributors__ = {}
 
 # This is a url where the most recent plugin package can be downloaded.
-__url__ = '' # 'http://supybot.com/Members/yourname/Mathbomb/download'
+__url__ = '' # 'http://supybot.com/Members/yourname/Regexbomb/download'
 
 import config
 import plugin
