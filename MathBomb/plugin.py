@@ -182,10 +182,10 @@ class Mathbomb(callbacks.Plugin):
 
         def _generate_equation_that_is_not_this_solution(self, solution):
             
-            pair = _generate_equation()
+            pair = self._generate_equation()
             
             while pair[0] =! solution:
-                pair = _generate_equation()
+                pair = self._generate_equation()
                 
             return pair
                  
