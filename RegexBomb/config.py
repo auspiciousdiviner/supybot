@@ -37,14 +37,14 @@ def configure(advanced):
     # user or not.  You should effect your configuration by manipulating the
     # registry as appropriate.
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('Mathbomb', True)
+    conf.registerPlugin('Regexbomb', True)
 
 
-Mathbomb = conf.registerPlugin('Mathbomb')
+Regexbomb = conf.registerPlugin('Regexbomb')
 # This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(Mathbomb, 'someConfigVariableName',
+# conf.registerGlobalValue(Regexbomb, 'someConfigVariableName',
 #     registry.Boolean(False, """Help for someConfigVariableName."""))
-conf.registerGlobalValue(Mathbomb, 'colors',
+conf.registerGlobalValue(Regexbomb, 'colors',
     registry.SpaceSeparatedListOfStrings(['AliceBlue', 'AntiqueWhite', 'Aqua',
         'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 
         'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse',
@@ -74,78 +74,78 @@ conf.registerGlobalValue(Mathbomb, 'colors',
         'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 
         'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 
         'YellowGreen'],
-    """The set of possible mathbomb wire colors"""))
+    """The set of possible regexbomb wire colors"""))
 
     
-conf.registerGlobalValue(Mathbomb, 'shortcolors',
+conf.registerGlobalValue(Regexbomb, 'shortcolors',
         registry.SpaceSeparatedListOfStrings(['red', 'orange', 'yellow', 
             'green', 'blue', 'purple', 'pink', 'black', 'brown', 'gray', 
             'white'],
-        """The set of possible mathbomb wire colors when there are few
+        """The set of possible regexbomb wire colors when there are few
                 wires"""))
 
-conf.registerChannelValue(Mathbomb, 'exclusions',
+conf.registerChannelValue(Regexbomb, 'exclusions',
         registry.SpaceSeparatedListOfStrings([], 
         """A list of nicks who should be excluded from being 
             randombombed"""))
 
-conf.registerChannelValue(Mathbomb, 'allowBombs', 
-        registry.Boolean(False, """Determines whether mathbombs are allowed 
+conf.registerChannelValue(Regexbomb, 'allowBombs', 
+        registry.Boolean(False, """Determines whether regexbombs are allowed 
             in the channel."""))
 
-conf.registerChannelValue(Mathbomb, 'minWires',
+conf.registerChannelValue(Regexbomb, 'minWires',
         registry.PositiveInteger(2, """Determines the minimum number of wires 
-            a mathbomb will have."""))
+            a regexbomb will have."""))
 
-conf.registerChannelValue(Mathbomb, 'maxWires',
+conf.registerChannelValue(Regexbomb, 'maxWires',
         registry.PositiveInteger(4, """Determines the maximum number of wires 
-            a mathbomb will have."""))
+            a regexbomb will have."""))
 
-conf.registerChannelValue(Mathbomb, 'minTime',
+conf.registerChannelValue(Regexbomb, 'minTime',
         registry.PositiveInteger(45, """Determines the minimum time of a 
-            mathbomb timer, in seconds."""))
+            regexbomb timer, in seconds."""))
 
-conf.registerChannelValue(Mathbomb, 'maxTime',
+conf.registerChannelValue(Regexbomb, 'maxTime',
         registry.PositiveInteger(70, """Determines the maximum time of a 
-            mathbomb timer, in seconds."""))
+            regexbomb timer, in seconds."""))
 
-conf.registerChannelValue(Mathbomb, 'minRandombombTime',
+conf.registerChannelValue(Regexbomb, 'minRandombombTime',
         registry.PositiveInteger(60, """Determines the minimum time of a 
             randombomb timer, which should in general be greater than the 
             minimum targeted bomb time, to allow someone who's not paying 
             attention to respond."""))
 
-conf.registerChannelValue(Mathbomb, 'maxRandombombTime',
+conf.registerChannelValue(Regexbomb, 'maxRandombombTime',
         registry.PositiveInteger(120, """Determines the maximum time of a 
             randombomb timer, which should in general be greater than the 
             maxiumum targeted bomb time, to allow someone who's not paying 
             attention to respond."""))
 
-conf.registerChannelValue(Mathbomb, 'showArt',
+conf.registerChannelValue(Regexbomb, 'showArt',
         registry.Boolean(True, """Determines whether an ASCII art bomb should 
             be shown on detonation, or a simple message."""))
 
-conf.registerChannelValue(Mathbomb, 'bombActiveUsers',
+conf.registerChannelValue(Regexbomb, 'bombActiveUsers',
         registry.Boolean(False, """Determines whether only active users 
             should be randombombed"""))
 
-conf.registerChannelValue(Mathbomb, 'joinIsActivity',
+conf.registerChannelValue(Regexbomb, 'joinIsActivity',
         registry.Boolean(False, """Determines whether channel joins should 
             count as activity for randombombs"""))
 
-conf.registerChannelValue(Mathbomb, 'allowSelfBombs',
+conf.registerChannelValue(Regexbomb, 'allowSelfBombs',
         registry.Boolean(False, """Allow the bot to bomb itself?"""))
 
-conf.registerChannelValue(Mathbomb, 'idleTime',
+conf.registerChannelValue(Regexbomb, 'idleTime',
         registry.PositiveInteger(60, """The number of minutes before someone 
             is counted as idle for randombombs, if idle-checking is 
             enabled."""))
 
-conf.registerChannelValue(Mathbomb, 'showCorrectWire',
+conf.registerChannelValue(Regexbomb, 'showCorrectWire',
         registry.Boolean(False, """Determines whether the correct wire will be
             shown when a bomb detonates."""))
 
-conf.registerGlobalValue(Mathbomb, 'debug',
+conf.registerGlobalValue(Regexbomb, 'debug',
         registry.Boolean(False, """Determines whether debugging info will be
             shown."""))
 
