@@ -179,11 +179,11 @@ class Mathbomb(callbacks.Plugin):
             equation = ""
             
             while no_divide_by_zero_exceptions == False:
-                number1 = random.randrange(1, 21)
-                number2 = random.randrange(1, 21)
-                number3 = random.randrange(1, 21)
-                number4 = random.randrange(1, 21)
-                number5 = random.randrange(1, 21)
+                number1 = random.randrange(1, 100)
+                number2 = random.randrange(1, 100)
+                number3 = random.randrange(1, 100)
+                number4 = random.randrange(1, 100)
+                number5 = random.randrange(1, 100)
                 equation = form.format(number1, number2, number3, number4, number5)
                 
                 try:
