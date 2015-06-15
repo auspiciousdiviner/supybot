@@ -47,59 +47,59 @@ class Hash(callbacks.Plugin):
     """An assortment of hashing functions"""
     threaded = True
 
-    def md5(self, irc, msg, args, string):
-        """<string>
+    def md5(self, irc, msg, args, text):
+        """<text>
         
-        Creates a md5 hash on <string>
+        Creates a md5 hash on <text>
         """
-        irc.reply(hashlib.md5(string).hexdigest())
+        irc.reply(hashlib.md5(text).hexdigest())
         
-    md5 = wrap(md5, ['string'])
+    md5 = wrap(md5, ['text'])
     
-    def sha1(self, irc, msg, args, string):
-        """<string>
+    def sha1(self, irc, msg, args, text):
+        """<text>
         
-        Creates a sha1 hash on <string>
+        Creates a sha1 hash on <text>
         """
-        irc.reply(hashlib.sha1(string).hexdigest())
+        irc.reply(hashlib.sha1(text).hexdigest())
         
-    sha1 = wrap(sha1, ['string'])
+    sha1 = wrap(sha1, ['text'])
 
-    def sha224(self, irc, msg, args, string):
-        """<string>
+    def sha224(self, irc, msg, args, text):
+        """<text>
         
-        Creates a sha-224 hash on <string>
+        Creates a sha-224 hash on <text>
         """
-        irc.reply(hashlib.sha224(string).hexdigest())
+        irc.reply(hashlib.sha224(text).hexdigest())
         
-    sha224 = wrap(sha224, ['string'])
+    sha224 = wrap(sha224, ['text'])
 
-    def sha256(self, irc, msg, args, string):
-        """<string>
+    def sha256(self, irc, msg, args, text):
+        """<text>
         
-        Creates a sha-256 hash on <string>
+        Creates a sha-256 hash on <text>
         """
-        irc.reply(hashlib.sha256(string).hexdigest())
+        irc.reply(hashlib.sha256(text).hexdigest())
         
-    sha256 = wrap(sha256, ['string'])
+    sha256 = wrap(sha256, ['text'])
     
-    def sha384(self, irc, msg, args, string):
-        """<string>
+    def sha384(self, irc, msg, args, text):
+        """<text>
         
-        Creates a sha-384 hash on <string>
+        Creates a sha-384 hash on <text>
         """
-        irc.reply(hashlib.sha384(string).hexdigest())
+        irc.reply(hashlib.sha384(text).hexdigest())
         
-    sha384 = wrap(sha384, ['string'])
+    sha384 = wrap(sha384, ['text'])
     
-    def sha512(self, irc, msg, args, string):
-        """<string>
+    def sha512(self, irc, msg, args, text):
+        """<text>
         
-        Creates a sha-512 hash on <string>
+        Creates a sha-512 hash on <text>
         """
-        irc.reply(hashlib.sha512(string).hexdigest())
+        irc.reply(hashlib.sha512(text).hexdigest())
         
-    sha512 = wrap(sha512, ['string'])
+    sha512 = wrap(sha512, ['text'])
 
 Class = Hash
 
