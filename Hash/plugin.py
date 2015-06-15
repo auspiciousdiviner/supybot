@@ -41,11 +41,65 @@ except ImportError:
     # without the i18n module
     _ = lambda x: x
 
+import hashlib
 
 class Hash(callbacks.Plugin):
     """An assortment of hashing functions"""
     threaded = True
 
+    def md5(self, irc, msg, args, string):
+        """<string>
+        
+        Creates a md5 hash on <string>
+        """
+        irc.reply(hashlib.md5(string).hexdigest())
+        
+    md5 = wrap(md5, ['string'])
+    
+    def sha1(self, irc, msg, args, string):
+        """<string>
+        
+        Creates a sha1 hash on <string>
+        """
+        irc.reply(hashlib.sha1(string).hexdigest())
+        
+    sha1 = wrap(sha1, ['string'])
+
+    def sha224(self, irc, msg, args, string):
+        """<string>
+        
+        Creates a sha-224 hash on <string>
+        """
+        irc.reply(hashlib.sha224(string).hexdigest())
+        
+    sha224 = wrap(sha224, ['string'])
+
+    def sha256(self, irc, msg, args, string):
+        """<string>
+        
+        Creates a sha-256 hash on <string>
+        """
+        irc.reply(hashlib.sha256(string).hexdigest())
+        
+    sha256 = wrap(sha256, ['string'])
+    
+    def sha384(self, irc, msg, args, string):
+        """<string>
+        
+        Creates a sha-384 hash on <string>
+        """
+        irc.reply(hashlib.sha384(string).hexdigest())
+        
+    sha384 = wrap(sha384, ['string'])
+    
+    def sha512(self, irc, msg, args, string):
+        """<string>
+        
+        Creates a sha-512 hash on <string>
+        """
+        irc.reply(hashlib.sha512(string).hexdigest())
+        
+    sha512 = wrap(sha512, ['string'])
 
 Class = Hash
 
