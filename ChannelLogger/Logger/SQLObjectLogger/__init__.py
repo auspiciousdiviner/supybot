@@ -47,8 +47,11 @@ class SQLObjectLog(FakeLog):
         self.doLog('notice', nick, text)
     def doAction(self, nick, action):
         self.doLog('action', nick, action)
-    def doMessage(self, nick, text):
-        self.doLog('message', nick, text)
+    def doMessage(self, nick, text, private):
+        if private:
+            self.doLog('private', nick, text)
+        else:
+            self.doLog('message', nick, text)
     def doNick(self, oldNick, newNick):
         self.doLog('nickchange', oldNick, newNick)
     def doJoin(self, nick, channel):
