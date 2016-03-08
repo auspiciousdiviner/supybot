@@ -8,6 +8,7 @@ JOIN = 6
 KICK = 7
 PART = 8
 QUIT = 9
+PRIVATE = 10
 
 
 sql = """
@@ -21,4 +22,5 @@ UPDATE log SET type = 6 where type='join';
 UPDATE log SET type = 7 where type='kick';
 UPDATE log SET type = 8 where type='part';
 UPDATE log SET type = 9 where type='quit';
+UPDATE log SET type = 10 where type='private';
 """
