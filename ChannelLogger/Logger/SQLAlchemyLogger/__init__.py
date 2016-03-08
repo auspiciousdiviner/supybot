@@ -48,8 +48,8 @@ class SQLAlchemyLog(BaseLog):
         self.doLog(model.NOTICE , nick, text)
     def doAction(self, nick, action):
         self.doLog(model.ACTION, nick, action)
-    def doMessage(self, nick, text, private):
-        if private:
+    def doMessage(self, nick, text, is_private_mesage):
+        if is_private_mesage:
             self.doLog(model.PRIVATE, nick, text)
         else:
             self.doLog(model.MESSAGE, nick, text)
