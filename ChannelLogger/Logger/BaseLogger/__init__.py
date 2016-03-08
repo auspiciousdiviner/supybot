@@ -33,8 +33,11 @@ class BaseLog(object):
         self.doLog('-%s- %s\n', nick, text)
     def doAction(self, nick, action):
         self.doLog('* %s %s\n', nick, action)
-    def doMessage(self, nick, text):
-        self.doLog('<%s> %s\n', nick, text)
+    def doMessage(self, nick, text, private):
+        if private:
+            self.doLog('<%s> %s\n', nick, "-= THIS MESSAGE NOT LOGGED =-")
+        else:
+            self.doLog('<%s> %s\n', nick, text)
     def doNick(self, oldNick, newNick):
         self.doLog('*** %s is now known as %s\n', oldNick, newNick)
     def doJoin(self, nick, channel):
