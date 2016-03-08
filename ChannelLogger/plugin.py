@@ -80,13 +80,14 @@ class ChannelLogger(callbacks.Plugin):
         for channel in recipients.split(','):
             if irc.isChannel(channel):
                 noLogPrefix = self.registryValue('noLogPrefix', channel)
-                if noLogPrefix and text.startswith(noLogPrefix):
-                    text = '-= THIS MESSAGE NOT LOGGED =-'
                 nick = msg.nick or irc.nick
                 if ircmsgs.isAction(msg):
                     self.logger.getLog(irc, channel).doAction(nick, ircmsgs.unAction(msg))
                 else:
-                    self.logger.getLog(irc, channel).doMessage(nick, text)
+                    if noLogPrefix and text.startswith(noLogPrefix):
+                        self.logger.getLog(irc, channel).doMessage(nick, text, True)
+                    else:
+                        self.logger.getLog(irc, channel).doMessage(nick, text, False)
 
     def doNotice(self, irc, msg):
         (recipients, text) = msg.args
