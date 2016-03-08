@@ -47,8 +47,8 @@ class SQLObjectLog(FakeLog):
         self.doLog('notice', nick, text)
     def doAction(self, nick, action):
         self.doLog('action', nick, action)
-    def doMessage(self, nick, text, private):
-        if private:
+    def doMessage(self, nick, text, is_private_mesage):
+        if is_private_mesage:
             self.doLog('private', nick, text)
         else:
             self.doLog('message', nick, text)
