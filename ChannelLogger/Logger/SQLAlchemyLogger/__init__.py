@@ -48,8 +48,11 @@ class SQLAlchemyLog(BaseLog):
         self.doLog(model.NOTICE , nick, text)
     def doAction(self, nick, action):
         self.doLog(model.ACTION, nick, action)
-    def doMessage(self, nick, text):
-        self.doLog(model.MESSAGE, nick, text)
+    def doMessage(self, nick, text, private):
+        if private:
+            self.doLog(model.PRIVATE, nick, text)
+        else:
+            self.doLog(model.MESSAGE, nick, text)
     def doNick(self, oldNick, newNick):
         self.doLog(model.NICKCHANGE, oldNick, newNick)
     def doJoin(self, nick, channel):
