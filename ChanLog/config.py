@@ -39,27 +39,27 @@ def configure(advanced):
     # user or not.  You should effect your configuration by manipulating the
     # registry as appropriate.
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('ChannelLogger', True)
+    conf.registerPlugin('ChanLog', True)
     
        
-ChannelLogger = conf.registerPlugin('ChannelLogger')
+ChanLog = conf.registerPlugin('ChanLog')
 
 
 ## general settings
-conf.registerChannelValue(ChannelLogger, 'noLogPrefix',
+conf.registerChannelValue(ChanLog, 'noLogPrefix',
     registry.String('[nolog]', """Determines what string a message should be
     prefixed with in order not to be logged.  If you don't want any such
     prefix, just set it to the empty string."""))
     
-conf.registerChannelValue(ChannelLogger, 'stripFormatting',
+conf.registerChannelValue(ChanLog, 'stripFormatting',
     registry.Boolean(True, """Determines whether formatting characters (such
     as bolding, color, etc.) are removed when writing the logs to disk."""))
 
 ## SA Settings
 
-conf.registerGlobalValue(ChannelLogger, 'SQLAlchemy',
+conf.registerGlobalValue(ChanLog, 'SQLAlchemy',
     registry.Boolean(False, """Log to a databse using SQLAlchemy"""))
-conf.registerGlobalValue(ChannelLogger.SQLAlchemy, 'URI',
+conf.registerGlobalValue(ChanLog.SQLAlchemy, 'URI',
     registry.String("", """The URI of your database in the form: scheme://[user[:password]@]host[:port]/database[?parameters]
 Examples:
 mysql://user:password@host/database
@@ -74,44 +74,44 @@ sqlite:/:memory:
 
 
 ## File log stuff
-conf.registerGlobalValue(ChannelLogger, 'File',
+conf.registerGlobalValue(ChanLog, 'File',
     registry.Boolean(True, """Log to a file"""))
-conf.registerGlobalValue(ChannelLogger.File, 'flushImmediately',
+conf.registerGlobalValue(ChanLog.File, 'flushImmediately',
     registry.Boolean(False, """Determines whether channel logfiles will be
     flushed anytime they're written to, rather than being buffered by the
     operating system."""))
-conf.registerChannelValue(ChannelLogger.File, 'timestamp',
+conf.registerChannelValue(ChanLog.File, 'timestamp',
     registry.Boolean(True, """Determines whether the logs for this channel are
     timestamped with the timestamp in supybot.log.timestampFormat."""))
-conf.registerChannelValue(ChannelLogger.File, 'rotateLogs',
+conf.registerChannelValue(ChanLog.File, 'rotateLogs',
     registry.Boolean(False, """Determines whether the bot will automatically
     rotate the logs for this channel.  The bot will rotate logs when the
     timestamp for the log changes.  The timestamp is set according to
     the 'filenameTimestamp' configuration variable."""))
-conf.registerChannelValue(ChannelLogger.File, 'filenameTimestamp',
+conf.registerChannelValue(ChanLog.File, 'filenameTimestamp',
     registry.String('%d-%a-%Y', """Determines how to represent the timestamp
     used for the filename in rotated logs.  When this timestamp changes, the
     old logfiles will be closed and a new one started. The format characters
     for the timestamp are in the time.strftime docs at python.org.  In order
     for your logs to be rotated, you'll also have to enable
-    supybot.plugins.ChannelLogger.rotateLogs."""))
+    supybot.plugins.ChanLog.rotateLogs."""))
 
-conf.registerGlobalValue(ChannelLogger.File, 'directories',
+conf.registerGlobalValue(ChanLog.File, 'directories',
     registry.Boolean(True, """Determines whether the bot will partition its
     channel logs into separate directories based on different criteria."""))
-conf.registerGlobalValue(ChannelLogger.File.directories, 'network',
+conf.registerGlobalValue(ChanLog.File.directories, 'network',
     registry.Boolean(True, """Determines whether the bot will use a network
     directory if using directories."""))
-conf.registerGlobalValue(ChannelLogger.File.directories, 'channel',
+conf.registerGlobalValue(ChanLog.File.directories, 'channel',
     registry.Boolean(True, """Determines whether the bot will use a channel
     directory if using directories."""))
-conf.registerGlobalValue(ChannelLogger.File.directories, 'timestamp',
+conf.registerGlobalValue(ChanLog.File.directories, 'timestamp',
     registry.Boolean(False, """Determines whether the bot will use a timestamp
-    (determined by supybot.plugins.ChannelLogger.directories.timestamp.format)
+    (determined by supybot.plugins.ChanLog.directories.timestamp.format)
     if using directories."""))
-conf.registerGlobalValue(ChannelLogger.File.directories.timestamp, 'format',
+conf.registerGlobalValue(ChanLog.File.directories.timestamp, 'format',
     registry.String('%B', """Determines what timestamp format will be used in
     the directory stucture for channel logs if
-    supybot.plugins.ChannelLogger.directories.timestamp is True."""))
+    supybot.plugins.ChanLog.directories.timestamp is True."""))
 
 
