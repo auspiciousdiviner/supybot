@@ -1,6 +1,6 @@
 ###
 # Copyright (c) 2007, Jochen Ritzel
-# Based on the original ChannelLogger code by Jeremiah Fincher, 
+# Based on the original ChanLog code by Jeremiah Fincher, 
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -36,10 +36,10 @@ import supybot.callbacks as callbacks
 
 from Logger import getLogger
 
-class ChannelLogger(callbacks.Plugin):
+class ChanLog(callbacks.Plugin):
     noIgnore = True
     def __init__(self, irc):
-        self.__parent = super(ChannelLogger, self)
+        self.__parent = super(ChanLog, self)
         self.__parent.__init__(irc)
 
         self.lastMsgs = {}
@@ -146,5 +146,5 @@ class ChannelLogger(callbacks.Plugin):
         return msg
 
 
-Class = ChannelLogger
+Class = ChanLog
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
