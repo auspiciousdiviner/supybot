@@ -1,4 +1,4 @@
-# This code is mostly the original ChannelLogger code by Jeremiah Fincher, 
+# This code is mostly the original ChanLog code by Jeremiah Fincher, 
 # extracted and restructured into its own class 
 import os
 import time
