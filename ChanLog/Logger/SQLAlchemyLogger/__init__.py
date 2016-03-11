@@ -49,8 +49,7 @@ class SQLAlchemyLog(BaseLog):
     def doAction(self, nick, action):
         self.doLog(model.ACTION, nick, action)
     def doMessage(self, nick, text, private):
-        noLogPrefix = self.registryValue('noLogPrefix', channel)
-        if noLogPrefix and text.startswith(noLogPrefix):
+        if private:
             self.doLog(model.PRIVATE, nick, text)
         else:
             self.doLog(model.MESSAGE, nick, text)
