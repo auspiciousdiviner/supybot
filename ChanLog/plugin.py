@@ -81,6 +81,7 @@ class ChanLog(callbacks.Plugin):
             if irc.isChannel(channel):
                 nick = msg.nick or irc.nick
                 if ircmsgs.isAction(msg):
+                    raise ValueError('Somethign good happened')
                     self.logger.getLog(irc, channel).doAction(nick, ircmsgs.unAction(msg))
                 else:
                     raise ValueError('A very specific bad thing happened')
