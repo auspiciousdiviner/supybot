@@ -3,11 +3,7 @@ Waratte's Supybot plugins
 
 A collection of supybot plugins [waratte](https://github.com/waratte) has made and fixed.
 
-Here are the plugins that currently do not work:
+These should be Python 3 compatible.
 
-- Holdem
-- PoIEpisodeDirectory
-- Poker
-- RegexBomb
+Working on getting the rest compatible...
 
-Someday I'll finish them.
