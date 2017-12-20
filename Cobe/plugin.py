@@ -64,24 +64,29 @@ except ImportError:
     
 class Cobe(callbacks.Plugin):
     """
-    Cobe is frontend to the cobe markov-chain bot for Limnoria/supybot. Use "list Cobe" to list possible
-    commands and "help Cobe <command>" to read their docs.
+    Cobe is frontend to the cobe markov-chain bot for Limnoria/supybot. 
+	Use "list Cobe" to list possible commands 
+	and "help Cobe <command>" to read their docs.
     """
     threaded = True
-    magicnick = 'PLZREPLACEMENICKUNKNOWNWORDSHAHAH'
+    RECIPIENT = '___RECIPIENT___'
     
     def __init__(self, irc):
         self.__parent = super(Cobe, self)
         self.__parent.__init__(irc)
         
     def _strip_nick(self, irc, msg, text):
+	
         for user in irc.state.channels[msg.args[0]].users:
+
             if len(user) <= 4: # Do not replace short nicks, as they might very
                 # well be part of a word
                 continue
-            text = text.replace(user, self.magicnick)
-            text = text.replace(user.lower(), self.magicnick)
-            text = text.replace(user.capitalize(), self.magicnick)
+				
+            text = text.replace(user, self.RECIPIENT)
+            text = text.replace(user.lower(), self.RECIPIENT)
+            text = text.replace(user.capitalize(), self.RECIPIENT)
+			
         return text
         
     def _getBrainDirectoryForChannel(self, channel):
@@ -104,6 +109,7 @@ class Cobe(callbacks.Plugin):
         """Internal method for decoding IRC messages."""
 
         changed = False
+		
         for enc in preferred_encs:
             try:
                 res = raw.decode(enc)
@@ -111,6 +117,7 @@ class Cobe(callbacks.Plugin):
                 break
             except:
                 pass
+				
         if not changed:
             try:
                 enc = chardet.detect(raw)['encoding']
@@ -123,23 +130,28 @@ class Cobe(callbacks.Plugin):
     def _cleanText(self, text):
         """Internal method for cleaning text of imperfections."""
         
-        text = self._decodeIRCMessage(text)         # Decode the string.
-        text = ircutils.stripFormatting(text)       # Strip IRC formatting from the string.
-        text = text.strip()                         # Strip whitespace from beginning and the end of the string.
-        if len(text) > 1:
-            # So we don't get an error if the text is too small
+        text = self._decodeIRCMessage(text)         
+        text = ircutils.stripFormatting(text)
+        text = text.strip()
+
+		# So we don't get an error if the text is too small
+        if len(text) > 1:            
             
-            text = text[0].upper() + text[1:]       # Capitalize first letter of the string.
+			# Capitalize first letter of the string.
+            text = text[0].upper() + text[1:]       
             
-        text = utils.str.normalizeWhitespace(text)  # Normalize the whitespace in the string.
+		# Normalize the whitespace in the string.
+        text = utils.str.normalizeWhitespace(text)  
         
         return text
         
     def _learn(self, irc, msg, channel, text, probability):
         """Internal method for learning phrases."""
         
+		recipientString = self.registryValue('recipientString', channel)
+		
+		# Does this channel have a directory for the brain file stored and does this file exist?
         if os.path.exists(self._getBrainDirectoryForChannel(channel)):
-            # Does this channel have a directory for the brain file stored and does this file exist?
             
             text = self._cleanText(text)
             
@@ -149,10 +161,11 @@ class Cobe(callbacks.Plugin):
                 cobeBrain = Brain(self._getBrainDirectoryForChannel(channel))
                 cobeBrain.learn(text)
                 
-                if random.randint(0, 10000) <= probability:
-                    self._reply(irc, msg, channel, text)
-                
-        else: # Nope, let's make it!
+                if random.random() < probability:
+                    self._reply(irc, msg, channel, text, recipientString)
+         
+		# Nope, let's make it!
+        else: 
                         
             subprocess.getoutput('{0} {1}'.format(self._doCommand(channel), 'init'))
             
@@ -164,34 +177,35 @@ class Cobe(callbacks.Plugin):
                 cobeBrain = Brain(self._getBrainDirectoryForChannel(channel))
                 cobeBrain.learn(text)
                 
-                if random.randint(0, 10000) <= probability:
-                    self._reply(irc, msg, channel, text)
+                if random.random() < probability:
+                    self._reply(irc, msg, channel, text, recipientString)
                 
-    def _reply(self, irc, msg, channel, text):
+    def _reply(self, irc, msg, channel, text, recipientString):
         """Send a response to text"""
         
         cobeBrain = Brain(self._getBrainDirectoryForChannel(channel))
         response = cobeBrain.reply(text).encode('utf-8')
         response = self._strip_nick(irc, msg, response)
         
-        for i in range(response.lower().count(self.magicnick.lower())):
-            # If first word is nick, switch with the callers nick.
-            if self.magicnick in response:
-                response = response.replace(self.magicnick, random.choice(list(irc.state.channels[msg.args[0]].users)))
-            if self.magicnick.lower() in response:
-                response = response.replace(self.magicnick.lower(), random.choice(list(irc.state.channels[msg.args[0]].users)))
-
+        for i in range(response.lower().count(self.RECIPIENT.lower())):
+		
+            if self.RECIPIENT in response:
+                response = response.replace(self.RECIPIENT, recipientString)
         
-        cobeBrain.learn(response) # Let's have the bot learn the wacky things it says
+		# Let's have the bot learn the wacky things it says
+        cobeBrain.learn(response)
         
         self.log.info("Attempting to respond in {0} with message: {1}".format(channel, response))
         
         # delay the response here so we look real?
         if self.registryValue('responseDelay', channel):
+		
             self.log.info("Delayed the response in %s." % channel)
             delayseconds = time.time() + random.randint(2, 5)
             schedule.addEvent(irc.queueMsg(ircmsgs.privmsg(channel, response)), delayseconds)
+			
         else:
+		
             irc.queueMsg(ircmsgs.privmsg(channel, response))
             
     def doPrivmsg(self, irc, msg):
@@ -211,38 +225,41 @@ class Cobe(callbacks.Plugin):
 
             return
             
-        
+		# If the message was an action...we'll learn it anyways!
         if ircmsgs.isAction(msg):
-            # If the message was an action...we'll learn it anyways!
-        
+		
             text = ircmsgs.unAction(msg)
                     
-        if self.registryValue('stripUrls'): # strip URLs
+		# strip URLs
+        if self.registryValue('stripUrls'):
+		
             text = re.sub(r'(http[^\s]*)', '', text)
         
+		# Were we addressed in the channel?
         if irc.nick.lower() in text.lower():
-            # Were we addressed in the channel?
             
             probability = self.registryValue('probabilityWhenAddressed', channel)
             
+		# Okay, we were not addressed, but what's the probability we should reply?
         else:
-            # Okay, we were not addressed, but what's the probability we should reply?
             
             probability = self.registryValue('probability', channel)
-
-        #if self.registryValue('stripNicks'):
-        #    removenicks = '|'.join(item + '\W.*?\s' for item in irc.state.channels[channel].users)
-        #    text = re.sub(r'' + removenicks + '', 'MAGIC_NICK', text)
         
-        self._learn(irc, msg, channel, text, probability) # Now we can pass this to our learn function!
+		# Now we can pass this to our learn function!
+        self._learn(irc, msg, channel, text, probability)
             
     def _makeSizePretty(self, size):
-        """Internal command for making the size pretty!"""
-        suffixes = [("Bytes",2**10), ("kibibytes",2**20), ("mebibytes",2**30), ("gibibytes",2**40), ("tebibytes",2**50)]
+        """Internal command for making the size more human readable."""
+		
+        suffixes = [("B",2**10), ("KiB",2**20), ("MiB",2**30), ("GiB",2**40), ("TiB",2**50)]
         for suf, lim in suffixes:
+		
             if size > lim:
+			
                 continue
+				
             else:
+			
                 return round(size/float(lim/2**10),2).__str__()+suf
             
     def brainsize(self, irc, msg, args, channel):
@@ -251,20 +268,25 @@ class Cobe(callbacks.Plugin):
         Prints the size of the brain on disk. If <channel> is not given, then the current channel is used.
         """
 
-        if not channel: # Did the user enter in a channel? If not, set the currect channel
+		# Did the user enter in a channel? If not, set the currect channel
+        if not channel:
             channel = msg.args[0]
 
-        if not irc.isChannel(channel): # Are we in a channel?
+		# Are we in a channel?
+        if not irc.isChannel(channel):
+		
+			# Does this channel have a brain file?
             if os.path.exists(self._getBrainDirectoryForChannel(channel)):
-                # Does this channel have a brain file?
                 
                 size = float(os.path.getsize(self._getBrainDirectoryForChannel(channel)))
                 irc.reply("The brain file for the channel {0} is {1}.".format(channel, self._makeSizePretty(size)))
-                
-            else: # Nope, raise error msg!
+            
+			# Nope, raise error msg!
+            else:
+			
                 irc.error(_("I am missing a brainfile in {0}!".format(channel)), Raise=True)
-                
-        elif os.path.exists(self._getBrainDirectoryForChannel(channel)): # We are in a channel! Does the brain file exist?
+        # We are in a channel! Does the brain file exist?
+        elif os.path.exists(self._getBrainDirectoryForChannel(channel)):
         
             size = float(os.path.getsize(self._getBrainDirectoryForChannel(channel)))
             irc.reply("The brain file for the channel {0} is {1}.".format(channel, self._makeSizePretty(size)))
@@ -280,14 +302,16 @@ class Cobe(callbacks.Plugin):
 
         Teaches the bot <text>. If the channel is not given, the current channel is used.
         """
-        if not channel: # Did the user enter in a channel? If not, set the current channel
+		
+		# Did the user enter in a channel? If not, set the current channel
+        if not channel:
             channel = msg.args[0]
 
+		# Are we in a channel and is the channel supplied a channel?
         if not irc.isChannel(msg.args[0]) and irc.isChannel(channel): 
-            # Are we in a channel and is the channel supplied a channel?
             
+			# Does this channel have a brain file?
             if os.path.exists(self._getBrainDirectoryForChannel(channel)):
-                # Does this channel have a brain file?
                
                 text = self._cleanText(text)
                 if text and len(text) > 1 and not text.isspace():
@@ -300,11 +324,11 @@ class Cobe(callbacks.Plugin):
         
                     irc.error(_("No text to learn!"), Raise=True)
                     
+			# Nope, create one!
             else: 
-                # Nope, create one!
             
-                self.log.info("Non-existent brainfile in {0}!".format(channel))
-                self.log.info("Creating a brainfile now in {0}".format(self._getBrainDirectoryForChannel(channel)))
+                self.log.info("Non-existent brain file in {0}!".format(channel))
+                self.log.info("Creating a brain file now in {0}".format(self._getBrainDirectoryForChannel(channel)))
                 
                 subprocess.getoutput('{0} {1}'.format(self._doCommand(channel), 'init'))
                 
@@ -315,9 +339,8 @@ class Cobe(callbacks.Plugin):
                     cobeBrain = Brain(self._getBrainDirectoryForChannel(channel))
                     cobeBrain.learn(text)
                 
-                
+        # We are in a channel! Does the brain file exist and are we supplied a channel?
         elif os.path.exists(self._getBrainDirectoryForChannel(channel)) and irc.isChannel(channel): 
-            # We are in a channel! Does the brain file exist and are we supplied a channel?
     
             text = self._cleanText(text)
             if text and len(text) > 1 and not text.isspace():
@@ -330,11 +353,11 @@ class Cobe(callbacks.Plugin):
         
                 irc.error(_("No text to learn!"), Raise=True)
                 
+		# Nope, create one!
         elif not os.path.exists(self._getBrainDirectoryForChannel(channel)) and irc.isChannel(channel):
-            # Nope, create one!
         
-            self.log.info("Non-existent brainfile in {0}!".format(channel))
-            self.log.info("Creating a brainfile now in {0}".format(self._getBrainDirectoryForChannel(channel)))
+            self.log.info("Non-existent brain file in {0}!".format(channel))
+            self.log.info("Creating a brain file now in {0}".format(self._getBrainDirectoryForChannel(channel)))
             
             subprocess.getoutput('{0} {1}'.format(self._doCommand(channel), 'init'))
             
@@ -346,6 +369,7 @@ class Cobe(callbacks.Plugin):
                 cobeBrain.learn(text)
                 
         else:
+		
             irc.error(_("Improper channel given!"), Raise=True)
             
     teach = wrap(teach, [('checkCapability', 'admin'), additional('channel'), 'text'])
@@ -355,14 +379,16 @@ class Cobe(callbacks.Plugin):
 
         Replies to <text>. If the channel is not given, the current channel is used.
         """
-        if not channel: # Did the user enter in a channel? If not, set the current channel
+		
+		# Did the user enter in a channel? If not, set the current channel
+        if not channel: 
             channel = msg.args[0]
 
+		# Are we in a channel and is the channel supplied a channel?
         if not irc.isChannel(msg.args[0]) and irc.isChannel(channel): 
-            # Are we in a channel and is the channel supplied a channel?
             
+			# Does this channel have a brain file?
             if os.path.exists(self._getBrainDirectoryForChannel(channel)):
-                # Does this channel have a brain file?
                 
                     text = self._cleanText(text)
                     if text and len(text) > 1 and not text.isspace():
@@ -374,12 +400,12 @@ class Cobe(callbacks.Plugin):
                     else:
             
                         irc.error(_("No text to reply to!"), Raise=True)
-                    
-            else: 
-                # Nope, create one!
+                   
+			# Nope, create one!
+            else:
             
-                self.log.info("Non-existent brainfile in {0}!".format(channel))
-                self.log.info("Creating a brainfile now in {0}".format(self._getBrainDirectoryForChannel(channel)))
+                self.log.info("Non-existent brain file in {0}!".format(channel))
+                self.log.info("Creating a brain file now in {0}".format(self._getBrainDirectoryForChannel(channel)))
                 
                 subprocess.getoutput('{0} {1}'.format(self._doCommand(channel), 'init'))
                 
@@ -391,10 +417,11 @@ class Cobe(callbacks.Plugin):
                     irc.reply(response)
                     
                 else:
+				
                     irc.error(_("No text to reply to!"), Raise=True)
                 
+		# We are in a channel! Does the brain file exist and is this a channel?
         elif os.path.exists(self._getBrainDirectoryForChannel(channel)) and irc.isChannel(channel): 
-            # We are in a channel! Does the brain file exist and is this a channel?
     
             text = self._cleanText(text)
             if text and len(text) > 1 and not text.isspace():
@@ -404,10 +431,11 @@ class Cobe(callbacks.Plugin):
                 irc.reply(response)
 
             else:
-                irc.error(_("No text to reply to!"), Raise=True)
+                irc.e
+				rror(_("No text to reply to!"), Raise=True)
 
+		# Nope, create one!
         elif not os.path.exists(self._getBrainDirectoryForChannel(channel)) and irc.isChannel(channel):
-            # Nope, create one!
         
             self.log.info("Non-existent brainfile in {0}!".format(channel))
             self.log.info("Creating a brainfile now in {0}".format(self._getBrainDirectoryForChannel(channel)))
@@ -422,9 +450,11 @@ class Cobe(callbacks.Plugin):
                 cobeBrain.learn(text)
                 
             else:
+			
                 irc.error(_("No text to reply to!"), Raise=True)
                 
         else:
+		
             irc.error(_("Improper channel given!"), Raise=True)
             
     respond = wrap(respond, [('checkCapability', 'admin'), additional('channel'), 'text'])
