@@ -1,7 +1,7 @@
 from supybot.commands import *
 import supybot.callbacks as callbacks
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from xml.etree import ElementTree
 
 class Wolfram(callbacks.Privmsg):
@@ -23,8 +23,8 @@ class Wolfram(callbacks.Privmsg):
                 maxoutput = value
 
         u = "http://api.wolframalpha.com/v2/query?"
-        q = urllib.urlencode({'input': question, 'appid': apikey})
-        xml = urllib.urlopen(u + q).read()
+        q = urllib.parse.urlencode({'input': question, 'appid': apikey})
+        xml = urllib.request.urlopen(u + q).read()
         tree = ElementTree.fromstring(xml)
 
         if tree.attrib['success'] == "false":
