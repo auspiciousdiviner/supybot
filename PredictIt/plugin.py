@@ -30,6 +30,10 @@
 
 from supybot import utils, plugins, ircutils, callbacks
 from supybot.commands import *
+
+import urllib.request, urllib.parse, urllib.error
+import json
+
 try:
 	from supybot.i18n import PluginInternationalization
 	_ = PluginInternationalization('PredictIt')
