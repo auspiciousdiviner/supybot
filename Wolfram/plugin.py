@@ -59,9 +59,9 @@ class Wolfram(callbacks.Plugin):
             return
 
         maxoutput = 2
-            for (key, value) in options:
-                if key == 'lines':
-                    maxoutput = value
+		for (key, value) in options:
+			if key == 'lines':
+				maxoutput = value
 
         u = "http://api.wolframalpha.com/v2/query?"
         q = urllib.parse.urlencode({'input': question, 'appid': apikey})
