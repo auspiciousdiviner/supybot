@@ -52,5 +52,6 @@ Alpha = conf.registerPlugin('Alpha')
 # conf.registerGlobalValue(Alpha, 'someConfigVariableName',
 #     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
 
+conf.registerGlobalValue(Alpha, 'apikey', registry.String('Not set', """API key to use WolframAlpha API. A key can be requested at https://developer.wolframalpha.com/.""", private=True))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

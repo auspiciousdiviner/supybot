@@ -33,6 +33,10 @@ from supybot.test import *
 
 class AlphaTestCase(PluginTestCase):
     plugins = ('Alpha',)
+	
+	def testAlpha(self):
+		# Difficult to test, let's just make sure it works
+		self.assertNotError('alpha test')
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
