@@ -53,9 +53,9 @@ __url__ = ''
 from . import config
 from . import plugin
 if sys.version_info >= (3, 4):
-    from importlib import reload
+	from importlib import reload
 else:
-    from imp import reload
+	from imp import reload
 # In case we're being reloaded.
 reload(config)
 reload(plugin)
@@ -63,7 +63,7 @@ reload(plugin)
 # reloaded when this plugin is reloaded.  Don't forget to import them as well!
 
 if world.testing:
-    from . import test
+	from . import test
 
 Class = plugin.Class
 configure = config.configure
