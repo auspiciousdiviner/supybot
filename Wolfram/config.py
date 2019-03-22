@@ -47,9 +47,9 @@ def configure(advanced):
     conf.registerPlugin('Wolfram', True)
 
 
-Alpha = conf.registerPlugin('Wolfram')
+Wolfram = conf.registerPlugin('Wolfram')
 # This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(Alpha, 'someConfigVariableName',
+# conf.registerGlobalValue(Wolfram, 'someConfigVariableName',
 #     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
 
 conf.registerGlobalValue(Wolfram, 'apikey', registry.String('Not set', """API key to use Wolfram Alpha API. A key can be requested at https://developer.wolframalpha.com/.""", private=True))
