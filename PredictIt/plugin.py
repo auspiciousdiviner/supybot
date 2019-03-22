@@ -43,6 +43,33 @@ class PredictIt(callbacks.Plugin):
     """Gets price data from PredictIt's api"""
     threaded = True
 
+	def predictit(self, irc, msg, args, market_id):
+ 
+		url = "https://www.predictit.org/api/marketdata/markets/" + market_id
+		 
+		with urllib.request.urlopen(url) as response:
+			file = response.read()
+		 
+		data = json.loads(file.decode('utf-8'))
+		 
+		output = data["shortName"]
+		 
+		if len(data["contracts"]) == 1:
+			yes = int(data["contracts"][0]["lastTradePrice"]*100)
+			no = 100 - yes
+			output = output + " Yes: {:d}%; No: {:d}%;".format(yes, no)
+			
+		else:
+			for contract in data["contracts"][:6]:
+				name = contract["shortName"]
+				price = int(contract["lastTradePrice"]*100)
+				output = output + " {:s}: {:d}%;".format(name, price)
+		 
+		output = output + " Data by PredictIt"
+		
+		irc.reply(output)
+
+	predictit = wrap(predictit, ['int'])
 
 Class = PredictIt
 
