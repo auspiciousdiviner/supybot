@@ -49,7 +49,7 @@ class PredictIt(callbacks.Plugin):
 		Provides the current market data on the market specified on PredictIt		
 		"""
 		
-		url = "https://www.predictit.org/api/marketdata/markets/" + market_id
+		url = "https://www.predictit.org/api/marketdata/markets/" + str(market_id)
 		 
 		with urllib.request.urlopen(url) as response:
 			file = response.read()
