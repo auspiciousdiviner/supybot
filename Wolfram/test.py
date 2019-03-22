@@ -32,7 +32,7 @@ from supybot.test import *
 
 
 class AlphaTestCase(PluginTestCase):
-    plugins = ('Alpha',)
+    plugins = ('Wolfram',)
 	
 	def testAlpha(self):
 		# Difficult to test, let's just make sure it works
