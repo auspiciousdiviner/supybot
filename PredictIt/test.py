@@ -33,6 +33,11 @@ from supybot.test import *
 
 class PredictItTestCase(PluginTestCase):
     plugins = ('PredictIt',)
+	
+	def test_predict_it(self):
+		# Difficult to test, let's just make sure it works
+		self.assertNotError('predictit 0')
+
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

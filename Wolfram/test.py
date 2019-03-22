@@ -31,7 +31,7 @@
 from supybot.test import *
 
 
-class AlphaTestCase(PluginTestCase):
+class WolframTestCase(PluginTestCase):
 	plugins = ('Wolfram',)
 	
 	def testAlpha(self):
