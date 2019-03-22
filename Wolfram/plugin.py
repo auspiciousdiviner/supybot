@@ -98,7 +98,7 @@ class Wolfram(callbacks.Plugin):
 							maxoutput = 2 # hack :D
 							outputcount += 1
 							continue
-						irc.reply(("%s: %s" % (title, output.encode('utf-8'))))
+						irc.reply(("%s: %s" % (title, output)))
 						outputcount += 1
 		if not found:
 			irc.reply("huh, I dunno, I'm still a baby AI. Wait till the singularity I guess?")
