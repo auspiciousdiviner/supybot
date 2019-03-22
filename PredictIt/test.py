@@ -32,7 +32,7 @@ from supybot.test import *
 
 
 class PredictItTestCase(PluginTestCase):
-    plugins = ('PredictIt',)
+	plugins = ('PredictIt',)
 	
 	def test_predict_it(self):
 		# Difficult to test, let's just make sure it works

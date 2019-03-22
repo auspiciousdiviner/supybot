@@ -31,17 +31,17 @@
 from supybot import utils, plugins, ircutils, callbacks
 from supybot.commands import *
 try:
-    from supybot.i18n import PluginInternationalization
-    _ = PluginInternationalization('PredictIt')
+	from supybot.i18n import PluginInternationalization
+	_ = PluginInternationalization('PredictIt')
 except ImportError:
-    # Placeholder that allows to run the plugin on a bot
-    # without the i18n module
-    _ = lambda x: x
+	# Placeholder that allows to run the plugin on a bot
+	# without the i18n module
+	_ = lambda x: x
 
 
 class PredictIt(callbacks.Plugin):
-    """Gets price data from PredictIt's api"""
-    threaded = True
+	"""Gets price data from PredictIt's api"""
+	threaded = True
 
 	def predictit(self, irc, msg, args, market_id):
  
