@@ -44,7 +44,11 @@ class PredictIt(callbacks.Plugin):
 	threaded = True
 
 	def predictit(self, irc, msg, args, market_id):
- 
+		"""<market_id>
+		
+		Provides the current market data on the market specified on PredictIt		
+		"""
+		
 		url = "https://www.predictit.org/api/marketdata/markets/" + market_id
 		 
 		with urllib.request.urlopen(url) as response:
