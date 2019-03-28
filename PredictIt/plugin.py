@@ -73,7 +73,7 @@ class PredictIt(callbacks.Plugin):
 				price = int(contract["lastTradePrice"]*100)
 				output = output + " {:s}: {:d}%;".format(name, price)
 		 
-		output = output + ": https://www.predictit.org/markets/detail/" + market_id + " Data by PredictIt"
+		output = output + ": https://www.predictit.org/markets/detail/" + str(market_id) + " Data by PredictIt"
 		
 		irc.reply(output)
 
