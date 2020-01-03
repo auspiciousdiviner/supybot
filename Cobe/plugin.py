@@ -135,6 +135,13 @@ class Cobe(callbacks.Plugin):
         
         return text
         
+    def _replace_all(pattern, repl, string) -> str:
+        """Internal method for replacing all instances of a pattern from string with repl"""
+        occurences = re.findall(pattern, string, re.IGNORECASE)
+        for occurence in occurences:
+            string = string.replace(occurence, repl)
+            return string
+        
     def _learn(self, irc, msg, channel, text, probability):
         """Internal method for learning phrases."""
         
@@ -223,10 +230,8 @@ class Cobe(callbacks.Plugin):
             probability = self.registryValue('probability', channel)
 
         if self.registryValue('stripNicks'):
-            users_lower = [ user.lower() for user in irc.state.channels[channel].users ]
-            split_text = text.split()
-            stripped_split_text = [ word for word in split_text if word.lower() not in users_lower ]
-            text = ' '.join(stripped_split_text)
+            for user in irc.state.channels[channel].users:
+                text = self._replace_all(user, self.replacement, text)
         
         self._learn(irc, msg, channel, text, probability) # Now we can pass this to our learn function!
             
