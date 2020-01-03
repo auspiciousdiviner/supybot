@@ -68,7 +68,7 @@ class Cobe(callbacks.Plugin):
     commands and "help Cobe <command>" to read their docs.
     """
     threaded = True
-    magicnick = 'PLZREPLACEMENICKUNKNOWNWORDSHAHAH'
+    replacement = self.registryValue('strippedNickReplacementWord')
     
     def __init__(self, irc):
         self.__parent = super(Cobe, self)
@@ -79,9 +79,9 @@ class Cobe(callbacks.Plugin):
             if len(user) <= 4: # Do not replace short nicks, as they might very
                 # well be part of a word
                 continue
-            text = text.replace(user, self.magicnick)
-            text = text.replace(user.lower(), self.magicnick)
-            text = text.replace(user.capitalize(), self.magicnick)
+            text = text.replace(user, self.replacement)
+            text = text.replace(user.lower(), self.replacement)
+            text = text.replace(user.capitalize(), self.replacement)
         return text
         
     def _getBrainDirectoryForChannel(self, channel):
@@ -174,14 +174,6 @@ class Cobe(callbacks.Plugin):
         response = cobeBrain.reply(text).encode('utf-8')
         response = self._strip_nick(irc, msg, response)
         
-        for i in range(response.lower().count(self.magicnick.lower())):
-            # If first word is nick, switch with the callers nick.
-            if self.magicnick in response:
-                response = response.replace(self.magicnick, random.choice(list(irc.state.channels[msg.args[0]].users)))
-            if self.magicnick.lower() in response:
-                response = response.replace(self.magicnick.lower(), random.choice(list(irc.state.channels[msg.args[0]].users)))
-
-        
         cobeBrain.learn(response) # Let's have the bot learn the wacky things it says
         
         self.log.info("Attempting to respond in {0} with message: {1}".format(channel, response))
@@ -230,9 +222,11 @@ class Cobe(callbacks.Plugin):
             
             probability = self.registryValue('probability', channel)
 
-        #if self.registryValue('stripNicks'):
-        #    removenicks = '|'.join(item + '\W.*?\s' for item in irc.state.channels[channel].users)
-        #    text = re.sub(r'' + removenicks + '', 'MAGIC_NICK', text)
+        if self.registryValue('stripNicks'):
+            users_lower = [ user.lower() for user in irc.state.channels[channel].users ]
+            split_text = text.split()
+            stripped_split_text = [ word for word in split_text if word.lower() not in users_lower ]
+            text = ' '.join(stripped_split_text)
         
         self._learn(irc, msg, channel, text, probability) # Now we can pass this to our learn function!
             
