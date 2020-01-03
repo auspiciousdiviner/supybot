@@ -140,7 +140,7 @@ class Cobe(callbacks.Plugin):
         occurences = re.findall(pattern, string, re.IGNORECASE)
         for occurence in occurences:
             string = string.replace(occurence, repl)
-            return string
+        return string
         
     def _learn(self, irc, msg, channel, text, probability):
         """Internal method for learning phrases."""
