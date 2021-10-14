@@ -54,8 +54,12 @@ class PredictIt(callbacks.Plugin):
 		"""
 		
 		url = "https://www.predictit.org/api/marketdata/markets/" + str(market_id)
+		user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+		headers = {'User-Agent':user_agent,} 
+
+		request = urllib.request.Request(url,None,headers)  # The assembled request
 		 
-		with urllib.request.urlopen(url) as response:
+		with urllib.request.urlopen(request) as response:
 			file = response.read()
 		 
 		data = json.loads(file.decode('utf-8'))
